@@ -1,34 +1,4 @@
-const getNeighbors = (midX, midY) => {
-    const neighbors = [];
-
-    for (let x = -1; x < 2; x++) {
-        for (let y = -1; y < 2; y++) {
-            const index = (x + midX + 5) % 5 + (y + midY + 5) % 5 * 5;
-            if ((x || y) && grid[index] !== undefined) {
-                neighbors.push(grid[index]);
-            }
-        }
-    }
-
-    return neighbors;
-};
-
-const getRandomColor = (x, y) => {
-    const neighbors = getNeighbors(x, y);
-
-    if (neighbors.length == 0) {
-        return Math.random() * 8 | 0;
-    }
-
-    const filled = neighbors.filter(v => v < 4);
-
-    return (Math.random() * 2 < filled.length / neighbors.length ? 4 : 0) | Math.random() * 4;
-};
-
-const grid = [];
-for(i = 25; i--;){
-  grid[i] = getRandomColor(i % 5, i / 5 | 0);
-}
+const grid = new Grid();
 
 const snake = {
     colors: [],
@@ -49,13 +19,11 @@ draw = e => {
     c.scale(scale, scale);
     c.translate(10,10);
 
-    for(y=5;y--;)
-        for(x=5;x--;) {
-            const value = grid[x + y * 5];
-            c.fillStyle = c.strokeStyle = ['#f00','#0f0','#00f','#ee0'][value % 4];
-            if (value < 4) c.fillRect(x*20+5,y*20+5,10,10);
-            else c.strokeRect(x*20+4,y*20+4,12,12);
-        }
+    for (const cell of grid.iterate()) {
+        c.fillStyle = c.strokeStyle = ['#f00','#0f0','#00f','#ee0'][cell.color];
+        if (cell.isDonut) c.fillRect(cell.x * 20 + 5, cell.y * 20 + 5, 10, 10);
+        else c.strokeRect(cell.x * 20 + 4, cell.y * 20 + 4, 12, 12);
+    }
 
     let lastPart;
     for (const i in snake.positions) {
@@ -133,16 +101,16 @@ move = async key => {
         return;
     }
 
-    const value = grid[part.x + part.y * 5];
+    const cell = grid.get(part);
 
     snake.positions.unshift(part);
 
-    if (value < 4) {
-        snake.colors.unshift(value);
-        grid[part.x + part.y * 5] = getRandomColor(part.x, part.y);
+    if (cell.isDonut) {
+        snake.colors.unshift(cell.color);
+        grid.roll(part);
     } else {
         snake.positions.pop();
-        const delta = digest(value % 4);
+        const delta = digest(cell.color);
         score += delta * (delta + 1) / 2;
         if (score > localStorage.hs2) localStorage.hs2 = score;
         moves += delta * 2;
@@ -180,8 +148,7 @@ removeColor = color => {
     const numRemoved = numColors - snake.colors.length;
 
     for (let k = numRemoved; k--;) {
-        const pos = snake.positions.pop();
-        grid[pos.x + pos.y * 5] = getRandomColor(pos.x, pos.y);
+        grid.roll(snake.positions.pop());
     }
 
     return numRemoved;
