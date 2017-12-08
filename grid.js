@@ -11,6 +11,8 @@ class Grid {
         const value = this.grid[x + y * 5];
 
         return {
+            x,
+            y,
             color: value % 4,
             isDonut: value < 4
         };

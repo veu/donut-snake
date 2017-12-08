@@ -1,9 +1,5 @@
 const grid = new Grid();
-
-const snake = {
-    colors: [],
-    positions: [{x: 2, y: 2}, {x: 2, y: 3}]
-};
+const snake = new Snake();
 
 let moves = 8;
 let score = 0;
@@ -26,28 +22,33 @@ draw = e => {
     }
 
     let lastPart;
-    for (const i in snake.positions) {
-        const part = snake.positions[i];
+    for (const part of snake.iterate()) {
         c.fillStyle = '#000';
-        c.fillRect(part.x*20+2,part.y*20+2,16,16);
+        c.fillRect(part.x * 20 + 2, part.y * 20 + 2, 16, 16);
 
-        if (i == 0) {
+        c.save();
+        c.translate(part.x * 20, part.y * 20)
+
+        if (part.isHead) {
             c.strokeStyle = '#fff';
-            c.strokeRect(part.x*20+5, part.y*20+8, 4, 3);
-            c.strokeRect(part.x*20+11, part.y*20+8, 4, 3);
-        } else if (i < snake.positions.length - 1) {
-            c.fillStyle = ['#f00','#0f0','#00f','#ee0'][snake.colors[i - 1]];
-            c.fillRect(part.x*20+5,part.y*20+5,10,10);
+            c.strokeRect(5, 8, 4, 3);
+            c.strokeRect(11, 8, 4, 3);
+        } else if (!part.isTail) {
+            c.fillStyle = ['#f00','#0f0','#00f','#ee0'][part.color];
+            c.fillRect(5, 5, 10, 10);
         }
 
         if (lastPart) {
             c.fillStyle = '#000';
-            if (lastPart.x - part.x == 1) c.fillRect(part.x*20+17, part.y*20+2, 6, 16);
-            if (lastPart.x - part.x == -1) c.fillRect(part.x*20-3, part.y*20+2, 6, 16);
-            if (lastPart.y - part.y == 1) c.fillRect(part.x*20+2, part.y*20+17, 16, 6);
-            if (lastPart.y - part.y == -1) c.fillRect(part.x*20+2, part.y*20-3, 16, 6);
+
+            if (lastPart.x - part.x == 1) c.fillRect(17, 2, 6, 16);
+            if (lastPart.x - part.x == -1) c.fillRect(-3, 2, 6, 16);
+            if (lastPart.y - part.y == 1) c.fillRect(2, 17, 16, 6);
+            if (lastPart.y - part.y == -1) c.fillRect(2, -3, 16, 6);
         }
         lastPart = part;
+
+        c.restore();
     }
 
     c.font = '12px Arial';
@@ -82,78 +83,32 @@ document.addEventListener('touchmove', e => {
     e.preventDefault();
 }, {passive: false});
 
-move = async key => {
+const move = key => {
     if (moves == 0) return;
-
-    -- moves;
 
     if (key === 0) dir = {x: -1, y: 0};
     if (key === 1) dir = {x: 0, y: -1};
     if (key === 2) dir = {x: 1, y: 0};
     if (key === 3) dir = {x: 0, y: 1};
 
-    const part = {
-        x: (snake.positions[0].x + dir.x + 5) % 5,
-        y: (snake.positions[0].y + dir.y + 5) % 5,
-    };
+    const cell = grid.get(snake.getNextPosition(dir));
 
-    if (isOccupied(part)) {
+    if (snake.isOccupied(cell)) {
         return;
     }
 
-    const cell = grid.get(part);
+    -- moves;
 
-    snake.positions.unshift(part);
+    const result = snake.move(cell);
 
-    if (cell.isDonut) {
-        snake.colors.unshift(cell.color);
-        grid.roll(part);
-    } else {
-        snake.positions.pop();
-        const delta = digest(cell.color);
+    if (result.digested) {
+        result.emptyCells.forEach(cell => grid.roll(cell));
+
+        const delta = result.colorCount;
         score += delta * (delta + 1) / 2;
         if (score > localStorage.hs2) localStorage.hs2 = score;
         moves += delta * 2;
     }
 
     draw();
-}
-
-digest = color => {
-    if (snake.positions.length < 2) return false;
-
-    const count = removeColor(color);
-
-    removeColor((color + 1) % 4);
-    removeColor((color + 2) % 4);
-    removeColor((color + 3) % 4);
-
-    return count;
-}
-
-isOccupied = pos => {
-    for (p of snake.positions) {
-        if (p.x == pos.x && p.y == pos.y) {
-            return true;
-        }
-    }
-    return false;
-}
-
-removeColor = color => {
-    const numColors = snake.colors.length;
-
-    snake.colors = snake.colors.filter(c => c != color);
-
-    const numRemoved = numColors - snake.colors.length;
-
-    for (let k = numRemoved; k--;) {
-        grid.roll(snake.positions.pop());
-    }
-
-    return numRemoved;
-}
-
-const sleep = s => {
-    return new Promise(resolve => setTimeout(resolve, s));
-}
+};
