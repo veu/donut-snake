@@ -67,10 +67,6 @@ const drawPart = (part) => {
         c.fillStyle = gradient;
         c.fill();
 
-        c.strokeStyle = '#000';
-        c.lineWidth = .3;
-        c.stroke();
-
         c.beginPath();
         c.ellipse(0, 4, 1.8, .8, -.3, 6, 3.8, 0);
         c.fillStyle = '#000';
@@ -96,101 +92,80 @@ const drawPart = (part) => {
         gradient.addColorStop(1, '#a51');
         c.fillStyle = gradient;
         c.fill();
-
-        c.strokeStyle = '#000';
-        c.lineWidth = .3;
-        c.stroke();
     } else {
         drawCurve(c, part, from, to);
-
-        c.strokeStyle = '#000';
-        c.lineWidth = .3;
-
-        c.beginPath();
-        addLeftCurve(c, from, to);
-        c.stroke();
-
-        c.beginPath();
-        addRightCurve(c, from, to);
-        c.stroke();
     }
 
     c.restore();
 };
 
-const addLeftCurve = (c, from, to) => {
-    c.moveTo(
-        from.x * 10 + ccw(from).x * 7 + 10,
-        from.y * 10 + ccw(from).y * 7 + 10
-    );
-    c.quadraticCurveTo(
-        (ccw(from).x || cw(to).x) * 7 + 10,
-        (ccw(from).y || cw(to).y) * 7 + 10,
-        to.x * 10 + cw(to).x * 7 + 10,
-        to.y * 10 + cw(to).y * 7 + 10
-    );
-};
-
-
-const addRightCurve = (c, from, to) => {
-    c.moveTo(
-        from.x * 10 + cw(from).x * 7 + 10,
-        from.y * 10 + cw(from).y * 7 + 10
-    );
-    c.quadraticCurveTo(
-        (cw(from).x || ccw(to).x) * 7 + 10,
-        (cw(from).y || ccw(to).y) * 7 + 10,
-        to.x * 10 + ccw(to).x * 7 + 10,
-        to.y * 10 + ccw(to).y * 7 + 10
-    );
-};
-
 const drawCurve = (c, part, from, to) => {
-    c.beginPath();
-    c.moveTo(
-        from.x * 10 + ccw(from).x * 7 + 10,
-        from.y * 10 + ccw(from).y * 7 + 10
-    );
-    c.quadraticCurveTo(
-        (ccw(from).x || cw(to).x) * 7 + 10,
-        (ccw(from).y || cw(to).y) * 7 + 10,
-        to.x * 10 + cw(to).x * 7 + 10,
-        to.y * 10 + cw(to).y * 7 + 10
-    );
-    c.lineTo(
-        to.x * 10 + ccw(to).x * 7 + 10,
-        to.y * 10 + ccw(to).y * 7 + 10
-    );
-    c.quadraticCurveTo(
-        (cw(from).x || ccw(to).x) * 7 + 10,
-        (cw(from).y || ccw(to).y) * 7 + 10,
-        from.x * 10 + cw(from).x * 7 + 10,
-        from.y * 10 + cw(from).y * 7 + 10
-    );
-    let gradient;
-    if (cw(cw(from)).x == to.x) {
-        gradient = c.createLinearGradient(
-            cw(from).x * 11 + 10,
-            cw(from).y * 11 + 10,
-            cw(to).x * 11 + 10,
-            cw(to).y * 11 + 10,
-        );
-    } else {
-        gradient = c.createRadialGradient(
-            (from.x || to.x) * 10 + 10,
-            (from.y || to.y) * 10 + 10,
-            0,
-            (from.x || to.x) * 10 + 10,
-            (from.y || to.y) * 10 + 10,
-            20
-        );
-    }
-    gradient.addColorStop(0, ['#f22','#0c0','#22f','#aa0'][part.color]);
-    gradient.addColorStop(.5, ['#faa','#afa','#aaf','#ff8'][part.color]);
-    gradient.addColorStop(1, ['#f22','#0c0','#22f','#aa0'][part.color]);
+    for (let i = 2; i--;) {
+        const width = 6 + i;
 
-    c.fillStyle = gradient;
-    c.fill();
+        const isStraight = cw(cw(from)).x == to.x;
+
+        let gradient;
+        if (isStraight) {
+            gradient = c.createLinearGradient(
+                cw(from).x * 11 + 10,
+                cw(from).y * 11 + 10,
+                cw(to).x * 11 + 10,
+                cw(to).y * 11 + 10,
+            );
+        } else {
+            gradient = c.createRadialGradient(
+                (from.x || to.x) * 10 + 10,
+                (from.y || to.y) * 10 + 10,
+                0,
+                (from.x || to.x) * 10 + 10,
+                (from.y || to.y) * 10 + 10,
+                20
+            );
+        }
+        gradient.addColorStop(0, i ? '#a51' : ['#f22','#0c0','#22f','#aa0'][part.color]);
+        gradient.addColorStop(.5, i ? '#c73' : ['#faa','#afa','#aaf','#ff8'][part.color]);
+        gradient.addColorStop(1, i ? '#a51' : ['#f22','#0c0','#22f','#aa0'][part.color]);
+
+        c.fillStyle = gradient;
+
+        c.beginPath();
+        c.moveTo(
+            from.x * 10 + ccw(from).x * width + 10,
+            from.y * 10 + ccw(from).y * width + 10
+        );
+        if (isStraight) {
+            c.lineTo(
+                to.x * 10 + cw(to).x * width + 10,
+                to.y * 10 + cw(to).y * width + 10
+            );
+        } else {
+            c.quadraticCurveTo(
+                (ccw(from).x || cw(to).x) * width + 10,
+                (ccw(from).y || cw(to).y) * width + 10,
+                to.x * 10 + cw(to).x * width + 10,
+                to.y * 10 + cw(to).y * width + 10
+            );
+        }
+        c.lineTo(
+            to.x * 10 + ccw(to).x * width + 10,
+            to.y * 10 + ccw(to).y * width + 10
+        );
+        if (isStraight) {
+            c.lineTo(
+                from.x * 10 + cw(from).x * width + 10,
+                from.y * 10 + cw(from).y * width + 10
+            );
+        } else {
+            c.quadraticCurveTo(
+                (cw(from).x || ccw(to).x) * width + 10,
+                (cw(from).y || ccw(to).y) * width + 10,
+                from.x * 10 + cw(from).x * width + 10,
+                from.y * 10 + cw(from).y * width + 10
+            );
+        }
+        c.fill();
+    }
 };
 
 const cw = dir => ({x: -dir.y, y: dir.x});
@@ -200,28 +175,22 @@ const toAngle = dir => (dir.x ? dir.x + 1 : dir.y + 2) * Math.PI / 2;
 const drawDonut = (x, y, color) => {
     c.save();
     c.translate(x * 20, y * 20);
-    c.beginPath();
-    c.arc(10,10,7,0,7,0);
-    c.arc(10,10,2,7,0,1);
 
-    {
-        const gradient = c.createRadialGradient(10, 10, 1, 10, 10, 8);
-        gradient.addColorStop(0, ['#f22','#0c0','#22f','#aa0'][color]);
-        gradient.addColorStop(.5, ['#faa','#afa','#aaf','#ff8'][color]);
-        gradient.addColorStop(1, ['#f22','#0c0','#22f','#aa0'][color]);
-        c.fillStyle = gradient;
+    for (let i = 2; i--;) {
+        c.beginPath();
+        c.arc(10, 10, 6 + i, 0, 7, 0);
+        c.arc(10, 10, 2 - i * .5, 7, 0, 1);
+
+        {
+            const gradient = c.createRadialGradient(10, 10, 1, 10, 10, 8);
+            gradient.addColorStop(0, i ? '#a51' : ['#f22','#0c0','#22f','#aa0'][color]);
+            gradient.addColorStop(.5, i ? '#c73' : ['#faa','#afa','#aaf','#ff8'][color]);
+            gradient.addColorStop(1, i ? '#a51' : ['#f22','#0c0','#22f','#aa0'][color]);
+            c.fillStyle = gradient;
+        }
+
+        c.fill();
     }
-
-    c.fill();
-
-    c.strokeStyle = '#000';
-    c.lineWidth = .3;
-    c.beginPath();
-    c.arc(10,10,7,0,7,0);
-    c.stroke();
-    c.beginPath();
-    c.arc(10,10,2,7,0,1);
-    c.stroke();
 
     c.restore();
 }
@@ -253,7 +222,7 @@ const drawDrink = (x, y, color) => {
     }
 
     c.lineWidth = .3;
-    c.strokeStyle = '#000';
+    c.strokeStyle = '#ccc';
     c.beginPath();
     c.arc(10,10,6,0,7,0);
     c.stroke();
