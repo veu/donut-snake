@@ -27,7 +27,6 @@ draw = e => {
 
     for (const part of snake.iterate()) {
         drawPart(part);
-        drawPart2(part);
     }
 
     c.font = '12px sans-serif';
@@ -37,20 +36,53 @@ draw = e => {
     c.fillText('SCORE ' + score + ' / ' + localStorage.hs2, 2, 139);
 }
 
-const drawPart2 = (part) => {
-    if (part.isHead) return;
-
+const drawPart = (part) => {
     c.save();
     c.translate(part.x * 20, part.y * 20);
 
-    const from = {
+    const from = part.prev && {
         x: part.prev.x - part.x,
         y: part.prev.y - part.y,
     };
 
-    if (part.isTail) {
+    const to = part.next && {
+        x: part.next.x - part.x,
+        y: part.next.y - part.y,
+    };
+
+    if (part.isHead) {
         c.translate(10, 10);
-        c.rotate(toAngle(from) * Math.PI / 2);
+        c.rotate(toAngle(to));
+        c.scale(1.5,1);
+
+        c.beginPath();
+        c.arc(-3, 0, 8, Math.PI * .5 + .5, Math.PI * 1.5 - .5, 1);
+
+        const gradient = c.createRadialGradient(
+            0, 0, 1,
+            0, 0, 9
+        );
+        gradient.addColorStop(0, '#c73');
+        gradient.addColorStop(1, '#a51');
+        c.fillStyle = gradient;
+        c.fill();
+
+        c.strokeStyle = '#000';
+        c.lineWidth = .3;
+        c.stroke();
+
+        c.beginPath();
+        c.ellipse(0, 4, 1.8, .8, -.3, 6, 3.8, 0);
+        c.fillStyle = '#000';
+        c.fill();
+
+        c.beginPath();
+        c.ellipse(0, -4, 1.8, .8, .3, 6.8, 2.5, 1);
+        c.fillStyle = '#000';
+        c.fill();
+    } else if (part.isTail) {
+        c.translate(10, 10);
+        c.rotate(toAngle(from));
         c.scale(2, 1);
 
         c.beginPath();
@@ -69,11 +101,6 @@ const drawPart2 = (part) => {
         c.lineWidth = .3;
         c.stroke();
     } else {
-        const to = {
-            x: part.next.x - part.x,
-            y: part.next.y - part.y,
-        };
-
         drawCurve(c, part, from, to);
 
         c.strokeStyle = '#000';
@@ -168,22 +195,7 @@ const drawCurve = (c, part, from, to) => {
 
 const cw = dir => ({x: -dir.y, y: dir.x});
 const ccw = dir => ({x: dir.y, y: -dir.x});
-const toAngle = dir => (dir.x ? dir.x + 1 : dir.y + 2);
-
-const drawPart = (part) => {
-    if (part.isHead) {
-        c.save();
-        c.translate(part.x * 20, part.y * 20);
-
-        c.fillStyle = '#000';
-        c.fillRect(2, 2, 16, 16);
-        c.strokeStyle = '#fff';
-        c.strokeRect(5, 8, 4, 3);
-        c.strokeRect(11, 8, 4, 3);
-
-        c.restore();
-    }
-}
+const toAngle = dir => (dir.x ? dir.x + 1 : dir.y + 2) * Math.PI / 2;
 
 const drawDonut = (x, y, color) => {
     c.save();
