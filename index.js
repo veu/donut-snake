@@ -70,9 +70,9 @@ const drawDonut = (x, y, color) => {
 
     {
         const gradient = c.createRadialGradient(10, 10, 1, 10, 10, 8);
-        gradient.addColorStop(0, ['#f22','#2f2','#22f','#ee2'][color]);
-        gradient.addColorStop(.5, ['#faa','#afa','#aaf','#ffa'][color]);
-        gradient.addColorStop(1, ['#f22','#2f2','#22f','#ee2'][color]);
+        gradient.addColorStop(0, ['#f22','#0c0','#22f','#aa0'][color]);
+        gradient.addColorStop(.5, ['#faa','#afa','#aaf','#ff8'][color]);
+        gradient.addColorStop(1, ['#f22','#0c0','#22f','#aa0'][color]);
         c.fillStyle = gradient;
     }
 
