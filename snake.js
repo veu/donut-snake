@@ -55,6 +55,8 @@ class Snake {
                 color: this.colors[i - 1],
                 isHead: i == 0,
                 isTail: i == this.positions.length - 1,
+                prev: this.positions[i - 1],
+                next: this.positions[+i + 1],
             };
         }
     }
