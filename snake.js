@@ -50,11 +50,12 @@ class Snake {
     *iterate() {
         for (let i in this.positions) {
             yield {
-                ...this.positions[i],
+                x: this.positions[i].x,
+                y: this.positions[i].y,
                 color: this.colors[i - 1],
                 isHead: i == 0,
                 isTail: i == this.positions.length - 1,
-            }
+            };
         }
     }
 }
