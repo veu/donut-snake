@@ -52,7 +52,7 @@ draw = e => {
         c.restore();
     }
 
-    c.font = '12px Arial';
+    c.font = '12px sans-serif';
     c.fillStyle = moves < 5 ? '#d00' : '#000';
     c.fillText('MOVES ' + moves, 2, 120);
     c.fillStyle = '#000';
