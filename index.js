@@ -18,8 +18,11 @@ draw = e => {
 
     for (const cell of grid.iterate()) {
         c.fillStyle = c.strokeStyle = ['#f00','#0f0','#00f','#ee0'][cell.color];
-        if (cell.isDonut) c.fillRect(cell.x * 20 + 5, cell.y * 20 + 5, 10, 10);
-        else c.strokeRect(cell.x * 20 + 4, cell.y * 20 + 4, 12, 12);
+        if (cell.isDonut) {
+            drawDonut(cell.x, cell.y, cell.color);
+        } else {
+            drawDrink(cell.x, cell.y, cell.color);
+        }
     }
 
     let lastPart;
@@ -34,12 +37,7 @@ draw = e => {
             c.strokeStyle = '#fff';
             c.strokeRect(5, 8, 4, 3);
             c.strokeRect(11, 8, 4, 3);
-        } else if (!part.isTail) {
-            c.fillStyle = ['#f00','#0f0','#00f','#ee0'][part.color];
-            c.fillRect(5, 5, 10, 10);
-        }
-
-        if (lastPart) {
+        } else {
             c.fillStyle = '#000';
 
             if (lastPart.x - part.x == 1) c.fillRect(17, 2, 6, 16);
@@ -50,6 +48,10 @@ draw = e => {
         lastPart = part;
 
         c.restore();
+
+        if (!part.isHead && !part.isTail) {
+            drawDonut(part.x, part.y, part.color);
+        }
     }
 
     c.font = '12px sans-serif';
@@ -57,6 +59,70 @@ draw = e => {
     c.fillText('MOVES ' + moves, 2, 120);
     c.fillStyle = '#000';
     c.fillText('SCORE ' + score + ' / ' + localStorage.hs2, 2, 139);
+}
+
+const drawDonut = (x, y, color) => {
+    c.save();
+    c.translate(x * 20, y * 20);
+    c.beginPath();
+    c.arc(10,10,7,0,7,0);
+    c.arc(10,10,2,7,0,1);
+
+    {
+        const gradient = c.createRadialGradient(10, 10, 1, 10, 10, 8);
+        gradient.addColorStop(0, ['#f22','#2f2','#22f','#ee2'][color]);
+        gradient.addColorStop(.5, ['#faa','#afa','#aaf','#ffa'][color]);
+        gradient.addColorStop(1, ['#f22','#2f2','#22f','#ee2'][color]);
+        c.fillStyle = gradient;
+    }
+
+    c.fill();
+
+    c.strokeStyle = '#000';
+    c.lineWidth = .3;
+    c.beginPath();
+    c.arc(10,10,7,0,7,0);
+    c.stroke();
+    c.beginPath();
+    c.arc(10,10,2,7,0,1);
+    c.stroke();
+
+    c.restore();
+}
+
+const drawDrink = (x, y, color) => {
+    c.save();
+    c.translate(x * 20, y * 20);
+
+    {
+      const gradient = c.createRadialGradient(10, 10, 1, 10, 10, 8);
+      gradient.addColorStop(.2, '#aaa');
+      gradient.addColorStop(1, '#fff');
+      c.fillStyle = gradient;
+
+      c.beginPath();
+      c.arc(10,10,6,0,7,0);
+      c.fill();
+    }
+
+    {
+      const gradient = c.createRadialGradient(6, 6, 6, 6, 6, 7);
+      gradient.addColorStop(1, ['#e00','#0d0','#00e','#dd0'][color]);
+      gradient.addColorStop(0, ['#e55','#5e5','#55e','#ee5'][color]);
+      c.fillStyle = gradient;
+
+      c.beginPath();
+      c.arc(10,10,4,0,7,0);
+      c.fill();
+    }
+
+    c.lineWidth = .3;
+    c.strokeStyle = '#000';
+    c.beginPath();
+    c.arc(10,10,6,0,7,0);
+    c.stroke();
+
+    c.restore();
 }
 
 draw();

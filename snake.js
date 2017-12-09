@@ -53,7 +53,7 @@ class Snake {
                 ...this.positions[i],
                 color: this.colors[i - 1],
                 isHead: i == 0,
-                isTail: i + 1 == this.positions.length,
+                isTail: i == this.positions.length - 1,
             }
         }
     }
