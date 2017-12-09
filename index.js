@@ -1,5 +1,6 @@
 const grid = new Grid();
 const snake = new Snake();
+const input = new Input();
 
 let moves = 8;
 let score = 0;
@@ -60,36 +61,10 @@ draw = e => {
 
 draw();
 
-onresize = () => draw();
+input.onRedraw(draw);
 
-onkeydown = e => {
-  if (37 <= e.keyCode && e.keyCode <= 40) {
-      move(e.keyCode - 37);
-  }
-}
-
-ontouchstart = e => {
-    down = e.changedTouches.item(0)
-}
-
-ontouchend = e => {
-    e = e.changedTouches.item(0);
-    const s = e.pageX - down.pageX;
-    const t = e.pageY - down.pageY;
-    if (s|t) move(s*s > t*t ? (s>0)*2 : (t>0)*2+1);
-}
-
-document.addEventListener('touchmove', e => {
-    e.preventDefault();
-}, {passive: false});
-
-const move = key => {
+input.onDirection(dir => {
     if (moves == 0) return;
-
-    if (key === 0) dir = {x: -1, y: 0};
-    if (key === 1) dir = {x: 0, y: -1};
-    if (key === 2) dir = {x: 1, y: 0};
-    if (key === 3) dir = {x: 0, y: 1};
 
     const cell = grid.get(snake.getNextPosition(dir));
 
@@ -111,4 +86,4 @@ const move = key => {
     }
 
     draw();
-};
+});
