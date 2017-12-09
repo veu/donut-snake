@@ -38,7 +38,7 @@ draw = e => {
 }
 
 const drawPart2 = (part) => {
-    if (part.isHead || part.isTail) return;
+    if (part.isHead) return;
 
     c.save();
     c.translate(part.x * 20, part.y * 20);
@@ -48,23 +48,45 @@ const drawPart2 = (part) => {
         y: part.prev.y - part.y,
     };
 
-    const to = {
-        x: part.next.x - part.x,
-        y: part.next.y - part.y,
-    };
+    if (part.isTail) {
+        c.translate(10, 10);
+        c.rotate(toAngle(from) * Math.PI / 2);
+        c.scale(2, 1);
 
-    drawCurve(c, part, from, to);
+        c.beginPath();
+        c.arc(-5, 0, 7, Math.PI * .5, Math.PI * 1.5, 1);
 
-    c.strokeStyle = '#000';
-    c.lineWidth = .3;
+        const gradient = c.createRadialGradient(
+            -5, 0, 1,
+            -5, 0, 9
+        );
+        gradient.addColorStop(0, '#c73');
+        gradient.addColorStop(1, '#a51');
+        c.fillStyle = gradient;
+        c.fill();
 
-    c.beginPath();
-    addLeftCurve(c, from, to);
-    c.stroke();
+        c.strokeStyle = '#000';
+        c.lineWidth = .3;
+        c.stroke();
+    } else {
+        const to = {
+            x: part.next.x - part.x,
+            y: part.next.y - part.y,
+        };
 
-    c.beginPath();
-    addRightCurve(c, from, to);
-    c.stroke();
+        drawCurve(c, part, from, to);
+
+        c.strokeStyle = '#000';
+        c.lineWidth = .3;
+
+        c.beginPath();
+        addLeftCurve(c, from, to);
+        c.stroke();
+
+        c.beginPath();
+        addRightCurve(c, from, to);
+        c.stroke();
+    }
 
     c.restore();
 };
@@ -146,20 +168,18 @@ const drawCurve = (c, part, from, to) => {
 
 const cw = dir => ({x: -dir.y, y: dir.x});
 const ccw = dir => ({x: dir.y, y: -dir.x});
+const toAngle = dir => (dir.x ? dir.x + 1 : dir.y + 2);
 
 const drawPart = (part) => {
-    if (part.isHead || part.isTail) {
+    if (part.isHead) {
         c.save();
         c.translate(part.x * 20, part.y * 20);
 
         c.fillStyle = '#000';
         c.fillRect(2, 2, 16, 16);
-
-        if (part.isHead) {
-            c.strokeStyle = '#fff';
-            c.strokeRect(5, 8, 4, 3);
-            c.strokeRect(11, 8, 4, 3);
-        }
+        c.strokeStyle = '#fff';
+        c.strokeRect(5, 8, 4, 3);
+        c.strokeRect(11, 8, 4, 3);
 
         c.restore();
     }
