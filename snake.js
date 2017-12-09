@@ -49,14 +49,24 @@ class Snake {
 
     *iterate() {
         for (let i in this.positions) {
+            const prev = this.positions[i - 1];
+            const next = this.positions[+i + 1];
             yield {
                 x: this.positions[i].x,
                 y: this.positions[i].y,
                 color: this.colors[i - 1],
                 isHead: i == 0,
                 isTail: i == this.positions.length - 1,
-                prev: this.positions[i - 1],
-                next: this.positions[+i + 1],
+                prev: prev && {
+                    x: prev.x,
+                    y: prev.y,
+                    color: this.colors[i - 2],
+                },
+                next: next && {
+                    x: next.x,
+                    y: next.y,
+                    color: this.colors[i],
+                },
             };
         }
     }

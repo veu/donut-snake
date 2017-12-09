@@ -92,6 +92,26 @@ const drawPart = (part) => {
         gradient.addColorStop(1, '#a51');
         c.fillStyle = gradient;
         c.fill();
+
+        if (part.prev.color !== undefined) {
+            c.scale(.4, 1);
+            c.beginPath();
+            c.arc(-12.5, 0, 6, Math.PI * .5, Math.PI * 1.5, 1);
+
+            const gradient = c.createRadialGradient(
+                -12.5,
+                0,
+                0,
+                -12.5,
+                0,
+                10
+            );
+            gradient.addColorStop(0, ['#faa','#afa','#aaf','#ff8'][part.prev.color]);
+            gradient.addColorStop(1, ['#f22','#0c0','#22f','#aa0'][part.prev.color]);
+
+            c.fillStyle = gradient;
+            c.fill();
+        }
     } else {
         drawCurve(c, part, from, to);
     }
