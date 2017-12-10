@@ -13,12 +13,30 @@ meta.setAttribute('content', `width=device-width, initial-scale=${scale}, maximu
 document.head.appendChild(meta);
 </script>
 <style>
+:root {
+    --scale: 1;
+}
 body { margin: 0; }
 canvas { display: block; }
+.container { position: relative; width: calc(var(--scale) * 120px); }
+.btn-restart {
+    position: absolute;
+    right: calc(var(--scale) * 10px);
+    bottom: calc(var(--scale) * 2px);
+    font-family: sans-serif;
+    font-size: calc(var(--scale) * 8px);
+    color: white;
+    border: none;
+    background: none;
+    outline: none;
+}
 </style>
 </head>
 <body>
-<canvas id=a></canvas>
+<div class="container">
+    <canvas id=a></canvas>
+    <button class='btn-restart'>Restart</button>
+</div>
 <script src="js/direction.js"></script>
 <script src="js/input.js"></script>
 <script src="js/grid.js"></script>

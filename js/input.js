@@ -37,6 +37,13 @@ class Input {
     }
 
     onRedraw(callback) {
-        onresize = () => callback();
+        onresize = () => { callback() };
+    }
+
+    onRestart(callback) {
+
+        for (const element of [...document.querySelectorAll('.btn-restart')]) {
+            element.addEventListener('click', () => { callback() });
+        }
     }
 }

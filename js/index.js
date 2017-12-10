@@ -9,11 +9,12 @@ const c = a.getContext('2d');
 localStorage.hs2 = localStorage.hs2 || 0;
 
 draw = e => {
-    a.width = innerWidth;
     a.height = innerHeight;
 
-    const scale = Math.min(innerWidth / 120, innerHeight / 170);
+    const scale = Math.min(innerWidth / 120, innerHeight / 180);
+    a.width = 120 * scale;
     c.scale(scale, scale);
+    document.documentElement.style.setProperty('--scale', scale);
     c.translate(10,10);
 
     for (const cell of grid.iterate()) {
@@ -29,10 +30,8 @@ draw = e => {
         drawPart(part);
     }
 
-    c.fillStyle = '#fde';
+    c.fillStyle = '#f6b';
     c.fillRect(-10, 110, 120, 200);
-    c.fillStyle = '#ebd';
-    c.fillRect(-10, 110, 120, .1);
 
     c.font = '8px sans-serif';
     c.fillStyle = '#200';
@@ -296,3 +295,5 @@ input.onDirection(dir => {
 
     draw();
 });
+
+input.onRestart(() => console.log('restart'));
