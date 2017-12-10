@@ -123,7 +123,7 @@ const drawCurve = (c, part, from, to) => {
     for (let i = 2; i--;) {
         const width = 6 + i;
 
-        const isStraight = from.cw().cw().x == to.x;
+        const isStraight = from.isOpposite(to);
 
         let gradient;
         if (isStraight) {
