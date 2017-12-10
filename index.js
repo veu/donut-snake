@@ -29,11 +29,26 @@ draw = e => {
         drawPart(part);
     }
 
+    c.fillStyle = '#eee';
+    c.fillRect(-10, 110, 120, 10);
+    c.fillStyle = '#ccc';
+    c.fillRect(-10, 110, 120, .1);
+    c.fillRect(-10, 120, 120, .1);
+
+    c.font = '8px sans-serif';
+    c.fillStyle = '#000';
+    c.fillText('MOVES', 2, 118);
+    c.textAlign = 'right';
+    c.fillText('SCORE', 100, 118);
+
     c.font = '12px sans-serif';
     c.fillStyle = moves < 5 ? '#d00' : '#000';
-    c.fillText('MOVES ' + moves, 2, 120);
+
+    c.textAlign = 'left';
+    c.fillText(moves, 2, 133);
     c.fillStyle = '#000';
-    c.fillText('SCORE ' + score + ' / ' + localStorage.hs2, 2, 139);
+    c.textAlign = 'right';
+    c.fillText(score + ' / ' + localStorage.hs2, 100, 133);
 }
 
 const drawPart = (part) => {
