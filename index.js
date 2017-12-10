@@ -222,7 +222,7 @@ const drawDrink = (x, y, color) => {
       c.fillStyle = gradient;
 
       c.beginPath();
-      c.arc(10,10,6,0,7,0);
+      c.arc(10,10,5.5,0,7,0);
       c.fill();
     }
 
@@ -233,14 +233,14 @@ const drawDrink = (x, y, color) => {
       c.fillStyle = gradient;
 
       c.beginPath();
-      c.arc(10,10,4,0,7,0);
+      c.arc(10,10,4.5,0,7,0);
       c.fill();
     }
 
     c.lineWidth = .3;
     c.strokeStyle = '#ccc';
     c.beginPath();
-    c.arc(10,10,6,0,7,0);
+    c.arc(10,10,5.5,0,7,0);
     c.stroke();
 
     c.restore();
