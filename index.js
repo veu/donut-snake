@@ -40,19 +40,19 @@ const drawPart = (part) => {
     c.save();
     c.translate(part.x * 20, part.y * 20);
 
-    const from = part.prev && {
-        x: part.prev.x - part.x,
-        y: part.prev.y - part.y,
-    };
+    const from = part.prev && new Direction(
+        part.prev.x - part.x,
+        part.prev.y - part.y
+    );
 
-    const to = part.next && {
-        x: part.next.x - part.x,
-        y: part.next.y - part.y,
-    };
+    const to = part.next && new Direction(
+        part.next.x - part.x,
+        part.next.y - part.y
+    );
 
     if (part.isHead) {
         c.translate(10, 10);
-        c.rotate(toAngle(to));
+        c.rotate(to.toAngle());
         c.scale(1.5,1);
 
         c.beginPath();
@@ -78,7 +78,7 @@ const drawPart = (part) => {
         c.fill();
     } else if (part.isTail) {
         c.translate(10, 10);
-        c.rotate(toAngle(from));
+        c.rotate(from.toAngle());
         c.scale(2, 1);
 
         c.beginPath();
@@ -123,15 +123,15 @@ const drawCurve = (c, part, from, to) => {
     for (let i = 2; i--;) {
         const width = 6 + i;
 
-        const isStraight = cw(cw(from)).x == to.x;
+        const isStraight = from.cw().cw().x == to.x;
 
         let gradient;
         if (isStraight) {
             gradient = c.createLinearGradient(
-                cw(from).x * 11 + 10,
-                cw(from).y * 11 + 10,
-                cw(to).x * 11 + 10,
-                cw(to).y * 11 + 10,
+                from.cw().x * 11 + 10,
+                from.cw().y * 11 + 10,
+                to.cw().x * 11 + 10,
+                to.cw().y * 11 + 10,
             );
         } else {
             gradient = c.createRadialGradient(
@@ -151,46 +151,42 @@ const drawCurve = (c, part, from, to) => {
 
         c.beginPath();
         c.moveTo(
-            from.x * 10 + ccw(from).x * width + 10,
-            from.y * 10 + ccw(from).y * width + 10
+            from.x * 10 + from.ccw().x * width + 10,
+            from.y * 10 + from.ccw().y * width + 10
         );
         if (isStraight) {
             c.lineTo(
-                to.x * 10 + cw(to).x * width + 10,
-                to.y * 10 + cw(to).y * width + 10
+                to.x * 10 + to.cw().x * width + 10,
+                to.y * 10 + to.cw().y * width + 10
             );
         } else {
             c.quadraticCurveTo(
-                (ccw(from).x || cw(to).x) * width + 10,
-                (ccw(from).y || cw(to).y) * width + 10,
-                to.x * 10 + cw(to).x * width + 10,
-                to.y * 10 + cw(to).y * width + 10
+                (from.ccw().x || to.cw().x) * width + 10,
+                (from.ccw().y || to.cw().y) * width + 10,
+                to.x * 10 + to.cw().x * width + 10,
+                to.y * 10 + to.cw().y * width + 10
             );
         }
         c.lineTo(
-            to.x * 10 + ccw(to).x * width + 10,
-            to.y * 10 + ccw(to).y * width + 10
+            to.x * 10 + to.ccw().x * width + 10,
+            to.y * 10 + to.ccw().y * width + 10
         );
         if (isStraight) {
             c.lineTo(
-                from.x * 10 + cw(from).x * width + 10,
-                from.y * 10 + cw(from).y * width + 10
+                from.x * 10 + from.cw().x * width + 10,
+                from.y * 10 + from.cw().y * width + 10
             );
         } else {
             c.quadraticCurveTo(
-                (cw(from).x || ccw(to).x) * width + 10,
-                (cw(from).y || ccw(to).y) * width + 10,
-                from.x * 10 + cw(from).x * width + 10,
-                from.y * 10 + cw(from).y * width + 10
+                (from.cw().x || to.ccw().x) * width + 10,
+                (from.cw().y || to.ccw().y) * width + 10,
+                from.x * 10 + from.cw().x * width + 10,
+                from.y * 10 + from.cw().y * width + 10
             );
         }
         c.fill();
     }
 };
-
-const cw = dir => ({x: -dir.y, y: dir.x});
-const ccw = dir => ({x: dir.y, y: -dir.x});
-const toAngle = dir => (dir.x ? dir.x + 1 : dir.y + 2) * Math.PI / 2;
 
 const drawDonut = (x, y, color) => {
     c.save();
