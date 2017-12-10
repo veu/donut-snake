@@ -1,12 +1,22 @@
-const grid = new Grid();
-const snake = new Snake();
+const state = {
+    highScore: 0,
+};
+
+const grid = new Grid(state);
+const snake = new Snake(state);
 const input = new Input();
 
-let moves = 8;
-let score = 0;
 const c = a.getContext('2d');
 
-localStorage.hs2 = localStorage.hs2 || 0;
+const startGame = () => {
+    state.moves = 8;
+    state.score = 0;
+
+    grid.init();
+    snake.init();
+
+    draw();
+};
 
 draw = e => {
     a.height = innerHeight;
@@ -37,7 +47,7 @@ draw = e => {
     c.fillStyle = '#200';
     let offset = 125;
 
-    for (const [key, value] of [['Moves', moves], ['Score', score], ['High Score', localStorage.hs2]]) {
+    for (const [key, value] of [['Moves', state.moves], ['Score', state.score], ['High Score', state.highScore]]) {
         let leftWidth = c.measureText(key).width;
         let rightWidth = c.measureText(value).width;
         for (let i = 0; i < 96 - leftWidth - rightWidth; i += 2) {
@@ -267,12 +277,10 @@ const drawDrink = (x, y, color) => {
     c.restore();
 }
 
-draw();
-
 input.onRedraw(draw);
 
 input.onDirection(dir => {
-    if (moves == 0) return;
+    if (state.moves == 0) return;
 
     const cell = grid.get(snake.getNextPosition(dir));
 
@@ -280,7 +288,7 @@ input.onDirection(dir => {
         return;
     }
 
-    -- moves;
+    -- state.moves;
 
     const result = snake.move(cell);
 
@@ -288,12 +296,14 @@ input.onDirection(dir => {
         result.emptyCells.forEach(cell => grid.roll(cell));
 
         const delta = result.colorCount;
-        score += delta * (delta + 1) / 2;
-        if (score > localStorage.hs2) localStorage.hs2 = score;
-        moves += delta * 2;
+        state.score += delta * (delta + 1) / 2;
+        state.highScore = Math.max(state.score, state.highScore);
+        state.moves += delta * 2;
     }
 
     draw();
 });
 
-input.onRestart(() => console.log('restart'));
+input.onRestart(() => startGame());
+
+startGame();

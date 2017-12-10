@@ -1,31 +1,37 @@
 class Snake {
-    constructor() {
-        this.colors = [];
-        this.positions = [
-            {x: 2, y: 2},
-            {x: 2, y: 3},
-        ];
+    constructor(state) {
+        this.state = state;
+    }
+
+    init() {
+        this.state.snake = {
+            colors: [],
+            positions: [
+                {x: 2, y: 2},
+                {x: 2, y: 3},
+            ],
+        };
     }
 
     isOccupied(pos) {
-        return this.positions.some(p => p.x == pos.x && p.y == pos.y);
+        return this.state.snake.positions.some(p => p.x == pos.x && p.y == pos.y);
     }
 
     getNextPosition(dir) {
         return {
-            x: (this.positions[0].x + dir.x + 5) % 5,
-            y: (this.positions[0].y + dir.y + 5) % 5,
+            x: (this.state.snake.positions[0].x + dir.x + 5) % 5,
+            y: (this.state.snake.positions[0].y + dir.y + 5) % 5,
         };
     }
 
     move(to) {
-        snake.positions.unshift({
+        this.state.snake.positions.unshift({
             x: to.x,
             y: to.y,
         });
 
         if (to.isDonut) {
-            snake.colors.unshift(to.color);
+            this.state.snake.colors.unshift(to.color);
 
             return {digested: false};
         }
@@ -34,11 +40,11 @@ class Snake {
     }
 
     digest(color) {
-        const colorCount = this.colors.filter(c => c === color).length;
-        const emptyCells = snake.positions.slice(2);
+        const colorCount = this.state.snake.colors.filter(c => c === color).length;
+        const emptyCells = this.state.snake.positions.slice(2);
 
-        snake.colors = [];
-        snake.positions = snake.positions.slice(0, 2);
+        this.state.snake.colors = [];
+        this.state.snake.positions = this.state.snake.positions.slice(0, 2);
 
         return {
             colorCount,
@@ -48,24 +54,26 @@ class Snake {
     }
 
     *iterate() {
-        for (let i in this.positions) {
-            const prev = this.positions[i - 1];
-            const next = this.positions[+i + 1];
+        const {colors, positions} = this.state.snake;
+
+        for (let i in positions) {
+            const prev = positions[i - 1];
+            const next = positions[+i + 1];
             yield {
-                x: this.positions[i].x,
-                y: this.positions[i].y,
-                color: this.colors[i - 1],
+                x: positions[i].x,
+                y: positions[i].y,
+                color: colors[i - 1],
                 isHead: i == 0,
-                isTail: i == this.positions.length - 1,
+                isTail: i == positions.length - 1,
                 prev: prev && {
                     x: prev.x,
                     y: prev.y,
-                    color: this.colors[i - 2],
+                    color: colors[i - 2],
                 },
                 next: next && {
                     x: next.x,
                     y: next.y,
-                    color: this.colors[i],
+                    color: colors[i],
                 },
             };
         }

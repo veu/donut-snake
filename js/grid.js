@@ -1,14 +1,17 @@
 class Grid {
-    constructor() {
-        this.grid = [];
+    constructor(state) {
+        this.state = state;
+    }
 
+    init() {
+        this.state.grid = [];
         for(let i = 25; i--;){
             this.roll({x: i % 5, y: i / 5 | 0});
         }
     }
 
     get({x, y}) {
-        const value = this.grid[x + y * 5];
+        const value = this.state.grid[x + y * 5];
 
         return {
             x,
@@ -19,13 +22,13 @@ class Grid {
     }
 
     roll({x, y}) {
-        this.grid[x+y*5] = this.getRandomColor(x, y)
+        this.state.grid[x+y*5] = this.getRandomColor(x, y)
     }
 
     *iterate() {
         for(let y = 5; y--;) {
             for(let x = 5; x--;) {
-                const value = this.grid[x + y * 5];
+                const value = this.state.grid[x + y * 5];
 
                 yield {
                     x,
@@ -55,8 +58,8 @@ class Grid {
         for (let x = -1; x < 2; x++) {
             for (let y = -1; y < 2; y++) {
                 const index = (x + midX + 5) % 5 + (y + midY + 5) % 5 * 5;
-                if ((x || y) && this.grid[index] !== undefined) {
-                    neighbors.push(this.grid[index]);
+                if ((x || y) && this.state.grid[index] !== undefined) {
+                    neighbors.push(this.state.grid[index]);
                 }
             }
         }
