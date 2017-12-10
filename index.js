@@ -29,9 +29,9 @@ draw = e => {
         drawPart(part);
     }
 
-    c.fillStyle = '#eee';
+    c.fillStyle = moves < 5 ? '#fee' : '#eef';
     c.fillRect(-10, 110, 120, 10);
-    c.fillStyle = '#ccc';
+    c.fillStyle = '#cce';
     c.fillRect(-10, 110, 120, .1);
     c.fillRect(-10, 120, 120, .1);
 
@@ -42,11 +42,9 @@ draw = e => {
     c.fillText('SCORE', 100, 118);
 
     c.font = '12px sans-serif';
-    c.fillStyle = moves < 5 ? '#d00' : '#000';
 
     c.textAlign = 'left';
     c.fillText(moves, 2, 133);
-    c.fillStyle = '#000';
     c.textAlign = 'right';
     c.fillText(score + ' / ' + localStorage.hs2, 100, 133);
 }
