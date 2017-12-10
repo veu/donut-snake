@@ -135,6 +135,9 @@ const drawPart = (part) => {
 };
 
 const drawCurve = (c, part, from, to) => {
+    c.save();
+    c.translate(10, 10);
+
     for (let i = 2; i--;) {
         const width = 6 + i;
 
@@ -143,18 +146,18 @@ const drawCurve = (c, part, from, to) => {
         let gradient;
         if (isStraight) {
             gradient = c.createLinearGradient(
-                from.cw().x * 11 + 10,
-                from.cw().y * 11 + 10,
-                to.cw().x * 11 + 10,
-                to.cw().y * 11 + 10,
+                from.cw().x * 11,
+                from.cw().y * 11,
+                to.cw().x * 11,
+                to.cw().y * 11,
             );
         } else {
             gradient = c.createRadialGradient(
-                (from.x || to.x) * 10 + 10,
-                (from.y || to.y) * 10 + 10,
+                (from.x || to.x) * 10,
+                (from.y || to.y) * 10,
                 0,
-                (from.x || to.x) * 10 + 10,
-                (from.y || to.y) * 10 + 10,
+                (from.x || to.x) * 10,
+                (from.y || to.y) * 10,
                 20
             );
         }
@@ -166,41 +169,43 @@ const drawCurve = (c, part, from, to) => {
 
         c.beginPath();
         c.moveTo(
-            from.x * 10 + from.ccw().x * width + 10,
-            from.y * 10 + from.ccw().y * width + 10
+            from.x * 10 + from.ccw().x * width,
+            from.y * 10 + from.ccw().y * width
         );
         if (isStraight) {
             c.lineTo(
-                to.x * 10 + to.cw().x * width + 10,
-                to.y * 10 + to.cw().y * width + 10
+                to.x * 10 + to.cw().x * width,
+                to.y * 10 + to.cw().y * width
             );
         } else {
             c.quadraticCurveTo(
-                (from.ccw().x || to.cw().x) * width + 10,
-                (from.ccw().y || to.cw().y) * width + 10,
-                to.x * 10 + to.cw().x * width + 10,
-                to.y * 10 + to.cw().y * width + 10
+                (from.ccw().x || to.cw().x) * width,
+                (from.ccw().y || to.cw().y) * width,
+                to.x * 10 + to.cw().x * width,
+                to.y * 10 + to.cw().y * width
             );
         }
         c.lineTo(
-            to.x * 10 + to.ccw().x * width + 10,
-            to.y * 10 + to.ccw().y * width + 10
+            to.x * 10 + to.ccw().x * width,
+            to.y * 10 + to.ccw().y * width
         );
         if (isStraight) {
             c.lineTo(
-                from.x * 10 + from.cw().x * width + 10,
-                from.y * 10 + from.cw().y * width + 10
+                from.x * 10 + from.cw().x * width,
+                from.y * 10 + from.cw().y * width
             );
         } else {
             c.quadraticCurveTo(
-                (from.cw().x || to.ccw().x) * width + 10,
-                (from.cw().y || to.ccw().y) * width + 10,
-                from.x * 10 + from.cw().x * width + 10,
-                from.y * 10 + from.cw().y * width + 10
+                (from.cw().x || to.ccw().x) * width,
+                (from.cw().y || to.ccw().y) * width,
+                from.x * 10 + from.cw().x * width,
+                from.y * 10 + from.cw().y * width
             );
         }
         c.fill();
     }
+
+    c.restore();
 };
 
 const drawDonut = (x, y, color) => {
