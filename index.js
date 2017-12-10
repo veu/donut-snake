@@ -29,24 +29,28 @@ draw = e => {
         drawPart(part);
     }
 
-    c.fillStyle = moves < 5 ? '#fee' : '#eef';
-    c.fillRect(-10, 110, 120, 10);
-    c.fillStyle = '#cce';
+    c.fillStyle = '#fde';
+    c.fillRect(-10, 110, 120, 200);
+    c.fillStyle = '#ebd';
     c.fillRect(-10, 110, 120, .1);
-    c.fillRect(-10, 120, 120, .1);
 
     c.font = '8px sans-serif';
-    c.fillStyle = '#000';
-    c.fillText('MOVES', 2, 118);
-    c.textAlign = 'right';
-    c.fillText('SCORE', 100, 118);
+    c.fillStyle = '#200';
+    let offset = 125;
 
-    c.font = '12px sans-serif';
+    for (const [key, value] of [['Moves', moves], ['Score', score], ['High Score', localStorage.hs2]]) {
+        let leftWidth = c.measureText(key).width;
+        let rightWidth = c.measureText(value).width;
+        for (let i = 0; i < 96 - leftWidth - rightWidth; i += 2) {
+            c.fillRect(3 + leftWidth + i, offset, 1, 1);
+        }
+        c.textAlign = 'left';
+        c.fillText(key, 2, offset + 1);
+        c.textAlign = 'right';
+        c.fillText(value, 100, offset + 1);
 
-    c.textAlign = 'left';
-    c.fillText(moves, 2, 133);
-    c.textAlign = 'right';
-    c.fillText(score + ' / ' + localStorage.hs2, 100, 133);
+        offset += 11;
+    }
 }
 
 const drawPart = (part) => {
