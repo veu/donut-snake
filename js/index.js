@@ -78,8 +78,8 @@ const drawPart = (part) => {
             0, 0, 1,
             0, 0, 9
         );
-        gradient.addColorStop(0, '#c73');
-        gradient.addColorStop(1, '#a51');
+        gradient.addColorStop(0, '#fc8');
+        gradient.addColorStop(1, '#eb6');
         c.fillStyle = gradient;
         c.fill();
 
@@ -104,8 +104,8 @@ const drawPart = (part) => {
             -5, 0, 1,
             -5, 0, 9
         );
-        gradient.addColorStop(0, '#c73');
-        gradient.addColorStop(1, '#a51');
+        gradient.addColorStop(0, '#fc8');
+        gradient.addColorStop(1, '#eb6');
         c.fillStyle = gradient;
         c.fill();
 
@@ -162,9 +162,9 @@ const drawCurve = (c, part, from, to) => {
                 20
             );
         }
-        gradient.addColorStop(0, i ? '#a51' : ['#f22','#0c0','#22f','#aa0'][part.color]);
-        gradient.addColorStop(.5, i ? '#c73' : ['#faa','#afa','#aaf','#ff8'][part.color]);
-        gradient.addColorStop(1, i ? '#a51' : ['#f22','#0c0','#22f','#aa0'][part.color]);
+        gradient.addColorStop(0, i ? '#eb6' : ['#f22','#0c0','#22f','#aa0'][part.color]);
+        gradient.addColorStop(.5, i ? '#fc8' : ['#faa','#afa','#aaf','#ff8'][part.color]);
+        gradient.addColorStop(1, i ? '#eb6' : ['#f22','#0c0','#22f','#aa0'][part.color]);
 
         c.fillStyle = gradient;
 
@@ -220,9 +220,9 @@ const drawDonut = (x, y, color) => {
 
         {
             const gradient = c.createRadialGradient(10, 10, 1, 10, 10, 8);
-            gradient.addColorStop(0, i ? '#a51' : ['#f22','#0c0','#22f','#aa0'][color]);
-            gradient.addColorStop(.5, i ? '#c73' : ['#faa','#afa','#aaf','#ff8'][color]);
-            gradient.addColorStop(1, i ? '#a51' : ['#f22','#0c0','#22f','#aa0'][color]);
+            gradient.addColorStop(0, i ? '#eb6' : ['#f22','#0c0','#22f','#aa0'][color]);
+            gradient.addColorStop(.5, i ? '#fc8' : ['#faa','#afa','#aaf','#ff8'][color]);
+            gradient.addColorStop(1, i ? '#eb6' : ['#f22','#0c0','#22f','#aa0'][color]);
             c.fillStyle = gradient;
         }
 
