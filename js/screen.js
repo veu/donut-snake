@@ -25,25 +25,37 @@ class Screen {
 
         this.ctx.clearRect(0, 0, 120, 120);
 
-        for (const cell of this.game.grid.iterate()) {
-            if (this.game.snake.isOccupied(cell)) continue;
+        this.drawGrid(this.game.grid, this.game.snake);
+        this.drawSnake(this.game.snake);
+        this.drawStats(this.game.state.moves, this.game.state.score, this.game.state.highScore);
+
+        this.ctx.restore();
+    }
+
+    drawGrid(grid, snake) {
+        for (const cell of grid.iterate()) {
+            if (snake.isOccupied(cell)) continue;
             if (cell.isDonut) {
                 this.drawDonut(cell.x, cell.y, cell.color);
             } else {
                 this.drawDrink(cell.x, cell.y, cell.color);
             }
         }
+    }
 
-        for (const part of this.game.snake.iterate()) {
+    drawSnake(snake) {
+        for (const part of snake.iterate()) {
             this.drawPart(part);
         }
+    }
 
+    drawStats(moves, score, highScore) {
         this.ctx.fillStyle = '#f6b';
         this.ctx.fillRect(-10, 110, 120, 200);
         this.ctx.fillStyle = '#200';
         let offset = 125;
 
-        for (const [key, value] of [['Moves', this.game.state.moves], ['Score', this.game.state.score], ['High Score', this.game.state.highScore]]) {
+        for (const [key, value] of [['Moves', moves], ['Score', score], ['High Score', highScore]]) {
             let leftWidth = this.ctx.measureText(key).width;
             let rightWidth = this.ctx.measureText(value).width;
             for (let i = 0; i < 96 - leftWidth - rightWidth; i += 2) {
@@ -56,8 +68,6 @@ class Screen {
 
             offset += 11;
         }
-
-        this.ctx.restore();
     }
 
     drawPart(part) {
