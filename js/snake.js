@@ -1,7 +1,7 @@
 class Snake {
-    constructor(state) {
-        this.state = state;
-        this.view = new SnakeView(this);
+    constructor(game) {
+        this.state = game.state;
+        this.view = new SnakeView(game.screen, this);
     }
 
     init() {

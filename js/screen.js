@@ -4,6 +4,8 @@ class Screen {
 
         this.canvas = document.querySelector('.screen');
         this.ctx = this.canvas.getContext('2d');
+
+        this.objects = [];
     }
 
     resize() {
@@ -19,6 +21,14 @@ class Screen {
         this.ctx.font = '8px sans-serif';
     }
 
+    add(object) {
+        this.objects.push(object);
+    }
+
+    remove(object) {
+        this.objects = this.objects.filter(o => o !== object);
+    }
+
     draw() {
         this.ctx.save();
 
@@ -26,8 +36,7 @@ class Screen {
 
         this.ctx.translate(10,10);
 
-        this.game.grid.view.draw(this.ctx, this.game.snake);
-        this.game.snake.view.draw(this.ctx);
+        this.objects.forEach(object => object.draw(this.ctx));
         this.drawStats(this.game.state.moves, this.game.state.score, this.game.state.highScore);
 
         this.ctx.restore();

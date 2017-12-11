@@ -1,6 +1,8 @@
 class SnakeView {
-    constructor(snake) {
+    constructor(screen, snake) {
         this.snake = snake;
+
+        screen.add(this);
     }
 
     draw(ctx) {

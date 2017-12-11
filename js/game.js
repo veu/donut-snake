@@ -2,10 +2,10 @@ class Game {
     constructor() {
         this.state = {};
 
-        this.grid = new Grid(this.state);
-        this.snake = new Snake(this.state);
-
         this.screen = new Screen(this);
+
+        this.grid = new Grid(this);
+        this.snake = new Snake(this);
     }
 
     start() {
@@ -52,6 +52,8 @@ class Game {
         }
 
         -- this.state.moves;
+
+        this.grid.empty(cell);
 
         const result = this.snake.move(cell);
 

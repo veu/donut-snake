@@ -1,12 +1,13 @@
 class GridView {
-    constructor(grid, snake) {
+    constructor(screen, grid) {
         this.grid = grid;
-        this.snake = snake;
+
+        screen.add(this);
     }
 
-    draw(ctx, snake) {
+    draw(ctx) {
         for (const cell of this.grid.iterate()) {
-            if (snake.isOccupied(cell)) continue;
+            if (!cell) continue;
 
             ctx.save();
             ctx.translate(cell.x * 20, cell.y * 20);

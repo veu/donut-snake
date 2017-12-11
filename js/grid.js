@@ -1,19 +1,32 @@
 class Grid {
-    constructor(state) {
-        this.state = state;
+    constructor(game) {
+        this.state = game.state;
 
-        this.view = new GridView(this);
+        this.view = new GridView(game.screen, this);
     }
 
     init() {
         this.state.grid = [];
-        for(let i = 25; i--;){
-            this.roll({x: i % 5, y: i / 5 | 0});
+
+        for(let y = 5; y--;) {
+            for(let x = 5; x--;) {
+                if (x == 2 && (y == 2 || y == 3)) {
+                    this.state.grid[x + y * 5] = null;
+
+                    continue;
+                }
+
+                this.roll({x, y});
+            }
         }
     }
 
     get({x, y}) {
         const value = this.state.grid[x + y * 5];
+
+        if (value === null) {
+            return;
+        }
 
         return {
             x,
@@ -24,20 +37,17 @@ class Grid {
     }
 
     roll({x, y}) {
-        this.state.grid[x+y*5] = this.getRandomColor(x, y)
+        this.state.grid[x + y * 5] = this.getRandomColor(x, y);
+    }
+
+    empty({x, y}) {
+        this.state.grid[x + y * 5] = null;
     }
 
     *iterate() {
         for(let y = 5; y--;) {
             for(let x = 5; x--;) {
-                const value = this.state.grid[x + y * 5];
-
-                yield {
-                    x,
-                    y,
-                    color: value % 4,
-                    isDonut: value < 4
-                }
+                yield this.get({x, y});
             }
         }
     }
