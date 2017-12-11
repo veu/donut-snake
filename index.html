@@ -51,10 +51,8 @@ canvas { display: block; }
 const game = new Game();
 const input = new Input();
 
-game.screen.resize();
 input.onResize(() => {
     game.screen.resize();
-    game.screen.draw();
 });
 input.onDirection(dir => game.move(dir));
 input.onRestart(() => game.start());

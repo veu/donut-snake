@@ -16,7 +16,6 @@ class Game {
         this.snake.init();
 
         this.save();
-        this.screen.draw(this);
     }
 
     save() {
@@ -31,7 +30,6 @@ class Game {
             for (const key in savedState) this.state[key] = savedState[key];
 
             if (this.state.moves > 0) {
-                this.screen.draw(this);
                 return;
             }
         } catch (e) { console.error(e); }
@@ -66,7 +64,6 @@ class Game {
             this.state.moves += delta * 2;
         }
 
-        game.save();
-        game.screen.draw(this);
+        this.save();
     }
 }

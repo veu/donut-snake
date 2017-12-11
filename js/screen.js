@@ -6,6 +6,8 @@ class Screen {
         this.ctx = this.canvas.getContext('2d');
 
         this.objects = [];
+
+        setInterval(() => this.draw(), 1000 / 30);
     }
 
     resize() {
@@ -30,6 +32,10 @@ class Screen {
     }
 
     draw() {
+        if (!this.scale) {
+            this.resize();
+        }
+
         this.ctx.save();
 
         this.ctx.clearRect(0, 0, 120, 120);
