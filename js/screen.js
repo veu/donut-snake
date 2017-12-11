@@ -26,7 +26,7 @@ class Screen {
         this.ctx.clearRect(0, 0, 120, 120);
 
         this.drawGrid(this.game.grid, this.game.snake);
-        this.drawSnake(this.game.snake);
+        this.game.snake.view.draw(this.ctx);
         this.drawStats(this.game.state.moves, this.game.state.score, this.game.state.highScore);
 
         this.ctx.restore();
@@ -40,12 +40,6 @@ class Screen {
             } else {
                 this.drawDrink(cell.x, cell.y, cell.color);
             }
-        }
-    }
-
-    drawSnake(snake) {
-        for (const part of snake.iterate()) {
-            this.drawPart(part);
         }
     }
 
@@ -69,163 +63,6 @@ class Screen {
             offset += 11;
         }
     }
-
-    drawPart(part) {
-        this.ctx.save();
-        this.ctx.translate(part.x * 20, part.y * 20);
-
-        const from = part.prev && new Direction(
-            part.prev.x - part.x,
-            part.prev.y - part.y
-        );
-
-        const to = part.next && new Direction(
-            part.next.x - part.x,
-            part.next.y - part.y
-        );
-
-        if (part.isHead) {
-            this.ctx.translate(10, 10);
-            this.ctx.rotate(to.toAngle());
-            this.ctx.scale(1.5,1);
-
-            this.ctx.beginPath();
-            this.ctx.arc(-3, 0, 8, Math.PI * .5 + .5, Math.PI * 1.5 - .5, 1);
-
-            const gradient = this.ctx.createRadialGradient(
-                0, 0, 1,
-                0, 0, 9
-            );
-            gradient.addColorStop(0, '#fc8');
-            gradient.addColorStop(1, '#eb6');
-            this.ctx.fillStyle = gradient;
-            this.ctx.fill();
-
-            this.ctx.beginPath();
-            this.ctx.ellipse(0, 4, 1.8, .8, -.3, 6, 3.8, 0);
-            this.ctx.fillStyle = '#000';
-            this.ctx.fill();
-
-            this.ctx.beginPath();
-            this.ctx.ellipse(0, -4, 1.8, .8, .3, 6.8, 2.5, 1);
-            this.ctx.fillStyle = '#000';
-            this.ctx.fill();
-        } else if (part.isTail) {
-            this.ctx.translate(10, 10);
-            this.ctx.rotate(from.toAngle());
-            this.ctx.scale(2, 1);
-
-            this.ctx.beginPath();
-            this.ctx.arc(-5, 0, 7, Math.PI * .5, Math.PI * 1.5, 1);
-
-            const gradient = this.ctx.createRadialGradient(
-                -5, 0, 1,
-                -5, 0, 9
-            );
-            gradient.addColorStop(0, '#fc8');
-            gradient.addColorStop(1, '#eb6');
-            this.ctx.fillStyle = gradient;
-            this.ctx.fill();
-
-            if (part.prev.color !== undefined) {
-                this.ctx.scale(.4, 1);
-                this.ctx.beginPath();
-                this.ctx.arc(-12.5, 0, 6, Math.PI * .5, Math.PI * 1.5, 1);
-
-                const gradient = this.ctx.createRadialGradient(
-                    -12.5,
-                    0,
-                    0,
-                    -12.5,
-                    0,
-                    10
-                );
-                gradient.addColorStop(0, ['#faa','#afa','#aaf','#ff8'][part.prev.color]);
-                gradient.addColorStop(1, ['#f22','#0c0','#22f','#aa0'][part.prev.color]);
-
-                this.ctx.fillStyle = gradient;
-                this.ctx.fill();
-            }
-        } else {
-            this.drawCurve(part, from, to);
-        }
-
-        this.ctx.restore();
-    };
-
-    drawCurve(part, from, to) {
-        this.ctx.save();
-        this.ctx.translate(10, 10);
-
-        for (let i = 2; i--;) {
-            const width = 6 + i;
-
-            const isStraight = from.isOpposite(to);
-
-            let gradient;
-            if (isStraight) {
-                gradient = this.ctx.createLinearGradient(
-                    from.cw().x * 11,
-                    from.cw().y * 11,
-                    to.cw().x * 11,
-                    to.cw().y * 11,
-                );
-            } else {
-                gradient = this.ctx.createRadialGradient(
-                    (from.x || to.x) * 10,
-                    (from.y || to.y) * 10,
-                    0,
-                    (from.x || to.x) * 10,
-                    (from.y || to.y) * 10,
-                    20
-                );
-            }
-            gradient.addColorStop(0, i ? '#eb6' : ['#f22','#0c0','#22f','#aa0'][part.color]);
-            gradient.addColorStop(.5, i ? '#fc8' : ['#faa','#afa','#aaf','#ff8'][part.color]);
-            gradient.addColorStop(1, i ? '#eb6' : ['#f22','#0c0','#22f','#aa0'][part.color]);
-
-            this.ctx.fillStyle = gradient;
-
-            this.ctx.beginPath();
-            this.ctx.moveTo(
-                from.x * 10 + from.ccw().x * width,
-                from.y * 10 + from.ccw().y * width
-            );
-            if (isStraight) {
-                this.ctx.lineTo(
-                    to.x * 10 + to.cw().x * width,
-                    to.y * 10 + to.cw().y * width
-                );
-            } else {
-                this.ctx.quadraticCurveTo(
-                    (from.ccw().x || to.cw().x) * width,
-                    (from.ccw().y || to.cw().y) * width,
-                    to.x * 10 + to.cw().x * width,
-                    to.y * 10 + to.cw().y * width
-                );
-            }
-            this.ctx.lineTo(
-                to.x * 10 + to.ccw().x * width,
-                to.y * 10 + to.ccw().y * width
-            );
-            if (isStraight) {
-                this.ctx.lineTo(
-                    from.x * 10 + from.cw().x * width,
-                    from.y * 10 + from.cw().y * width
-                );
-            } else {
-                this.ctx.quadraticCurveTo(
-                    (from.cw().x || to.ccw().x) * width,
-                    (from.cw().y || to.ccw().y) * width,
-                    from.x * 10 + from.cw().x * width,
-                    from.y * 10 + from.cw().y * width
-                );
-            }
-            this.ctx.fill();
-        }
-
-        this.ctx.restore();
-    };
 
     drawDonut(x, y, color) {
         this.ctx.save();

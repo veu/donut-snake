@@ -1,6 +1,7 @@
 class Snake {
     constructor(state) {
         this.state = state;
+        this.view = new SnakeView(this);
     }
 
     init() {
