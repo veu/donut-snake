@@ -15,7 +15,6 @@ class Screen {
         document.documentElement.style.setProperty('--scale', this.scale);
 
         this.ctx.scale(this.scale, this.scale);
-        this.ctx.translate(10,10);
 
         this.ctx.font = '8px sans-serif';
     }
@@ -24,6 +23,8 @@ class Screen {
         this.ctx.save();
 
         this.ctx.clearRect(0, 0, 120, 120);
+
+        this.ctx.translate(10,10);
 
         this.game.grid.view.draw(this.ctx, this.game.snake);
         this.game.snake.view.draw(this.ctx);
