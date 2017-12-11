@@ -1,6 +1,8 @@
 class Grid {
     constructor(state) {
         this.state = state;
+
+        this.view = new GridView(this);
     }
 
     init() {
