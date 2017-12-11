@@ -36,7 +36,7 @@ canvas { display: block; }
 </head>
 <body>
 <div class="container">
-    <canvas id=a></canvas>
+    <canvas class="screen"></canvas>
     <button class='btn-restart'>Restart</button>
 </div>
 <script src="js/direction.js"></script>
@@ -49,7 +49,11 @@ canvas { display: block; }
 const game = new Game();
 const input = new Input();
 
-input.onRedraw(() => game.screen.draw());
+game.screen.resize();
+input.onResize(() => {
+    game.screen.resize();
+    game.screen.draw();
+});
 input.onDirection(dir => game.move(dir));
 input.onRestart(() => game.start());
 

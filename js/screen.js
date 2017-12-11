@@ -1,19 +1,32 @@
 class Screen {
-    constructor() {
-        this.ctx = a.getContext('2d');
+    constructor(game) {
+        this.game = game;
+
+        this.canvas = document.querySelector('.screen');
+        this.ctx = this.canvas.getContext('2d');
     }
 
-    draw(game) {
-        a.height = innerHeight;
+    resize() {
+        this.scale = Math.min(innerWidth / 120, innerHeight / 180);
 
-        const scale = Math.min(innerWidth / 120, innerHeight / 180);
-        a.width = 120 * scale;
-        this.ctx.scale(scale, scale);
-        document.documentElement.style.setProperty('--scale', scale);
+        this.canvas.width = 120 * this.scale;
+        this.canvas.height = innerHeight;
+
+        document.documentElement.style.setProperty('--scale', this.scale);
+
+        this.ctx.scale(this.scale, this.scale);
         this.ctx.translate(10,10);
 
-        for (const cell of game.grid.iterate()) {
-            if (game.snake.isOccupied(cell)) continue;
+        this.ctx.font = '8px sans-serif';
+    }
+
+    draw() {
+        this.ctx.save();
+
+        this.ctx.clearRect(0, 0, 120, 120);
+
+        for (const cell of this.game.grid.iterate()) {
+            if (this.game.snake.isOccupied(cell)) continue;
             if (cell.isDonut) {
                 this.drawDonut(cell.x, cell.y, cell.color);
             } else {
@@ -21,18 +34,16 @@ class Screen {
             }
         }
 
-        for (const part of game.snake.iterate()) {
+        for (const part of this.game.snake.iterate()) {
             this.drawPart(part);
         }
 
         this.ctx.fillStyle = '#f6b';
         this.ctx.fillRect(-10, 110, 120, 200);
-
-        this.ctx.font = '8px sans-serif';
         this.ctx.fillStyle = '#200';
         let offset = 125;
 
-        for (const [key, value] of [['Moves', game.state.moves], ['Score', game.state.score], ['High Score', game.state.highScore]]) {
+        for (const [key, value] of [['Moves', this.game.state.moves], ['Score', this.game.state.score], ['High Score', this.game.state.highScore]]) {
             let leftWidth = this.ctx.measureText(key).width;
             let rightWidth = this.ctx.measureText(value).width;
             for (let i = 0; i < 96 - leftWidth - rightWidth; i += 2) {
@@ -45,6 +56,8 @@ class Screen {
 
             offset += 11;
         }
+
+        this.ctx.restore();
     }
 
     drawPart(part) {

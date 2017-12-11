@@ -5,7 +5,7 @@ class Game {
         this.grid = new Grid(this.state);
         this.snake = new Snake(this.state);
 
-        this.screen = new Screen();
+        this.screen = new Screen(this);
     }
 
     start() {

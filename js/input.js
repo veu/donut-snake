@@ -36,7 +36,7 @@ class Input {
         }, {passive: false});
     }
 
-    onRedraw(callback) {
+    onResize(callback) {
         onresize = () => { callback() };
     }
 
