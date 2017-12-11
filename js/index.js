@@ -1,7 +1,4 @@
-const state = {
-    highScore: 0,
-};
-
+const state = {};
 const grid = new Grid(state);
 const snake = new Snake(state);
 const input = new Input();
@@ -15,6 +12,7 @@ const startGame = () => {
     grid.init();
     snake.init();
 
+    save();
     draw();
 };
 
@@ -301,9 +299,33 @@ input.onDirection(dir => {
         state.moves += delta * 2;
     }
 
+    save();
     draw();
 });
 
+const loadGame = () => {
+    let savedState;
+    try {
+        savedState = JSON.parse(localStorage.getItem('save'));
+        for (key in state) delete state[key];
+        for (key in savedState) state[key] = savedState[key];
+
+        if (state.moves > 0) {
+            draw();
+            return;
+        }
+    } catch (e) { console.error(e); }
+
+    for (key in state) delete state[key];
+    state.highScore = savedState && savedState.highScore || 0;
+
+    startGame();
+}
+
+const save = () => {
+    localStorage.setItem('save', JSON.stringify(state));
+};
+
 input.onRestart(() => startGame());
 
-startGame();
+loadGame();
