@@ -7,18 +7,21 @@ class GridView {
     draw(ctx, snake) {
         for (const cell of this.grid.iterate()) {
             if (snake.isOccupied(cell)) continue;
+
+            ctx.save();
+            ctx.translate(cell.x * 20, cell.y * 20);
+
             if (cell.isDonut) {
-                this.drawDonut(ctx, cell.x, cell.y, cell.color);
+                this.drawDonut(ctx, cell.color);
             } else {
-                this.drawDrink(ctx, cell.x, cell.y, cell.color);
+                this.drawDrink(ctx, cell.color);
             }
+
+            ctx.restore();
         }
     }
 
-    drawDonut(ctx, x, y, color) {
-        ctx.save();
-        ctx.translate(x * 20, y * 20);
-
+    drawDonut(ctx, color) {
         for (let i = 2; i--;) {
             ctx.beginPath();
             ctx.arc(10, 10, 6 + i, 0, 7, 0);
@@ -34,14 +37,9 @@ class GridView {
 
             ctx.fill();
         }
-
-        ctx.restore();
     }
 
-    drawDrink(ctx, x, y, color) {
-        ctx.save();
-        ctx.translate(x * 20, y * 20);
-
+    drawDrink(ctx, color) {
         {
           const gradient = ctx.createRadialGradient(10, 10, 1, 10, 10, 8);
           gradient.addColorStop(.2, '#aaa');
@@ -69,7 +67,5 @@ class GridView {
         ctx.beginPath();
         ctx.arc(10,10,5.5,0,7,0);
         ctx.stroke();
-
-        ctx.restore();
     }
 }
