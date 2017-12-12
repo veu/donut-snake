@@ -51,7 +51,7 @@ class Snake {
         });
 
         this.state.snake.colors.unshift(to.isDonut ? to.color : undefined);
-        this.bodyViews.push(new SnakeBodyView(this.get(1)));
+        this.bodyViews.push(new SnakeBodyView(this.get(1), true));
 
         this.updateTurn();
         this.headView.move(this.get(0));

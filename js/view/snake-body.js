@@ -1,5 +1,5 @@
 class SnakeBodyView {
-    constructor(part) {
+    constructor(part, animate=false) {
         this.x = part.x;
         this.y = part.y;
         this.color = part.color;
@@ -14,6 +14,11 @@ class SnakeBodyView {
             part.next.y - part.y
         );
 
+        this.visible = animate ? 0 : 1;
+        if (animate) {
+            game.screen.addTween(this, 'visible', {to: 1, ease: 'inout', duration: 20});
+        }
+
         game.screen.add(this);
     }
 
@@ -21,10 +26,18 @@ class SnakeBodyView {
         ctx.save();
         ctx.translate(this.x * 20 + 10, this.y * 20 + 10);
 
+        const isStraight = this.from.isOpposite(this.to);
+
+        if (this.visible < 1 && isStraight) {
+            ctx.beginPath();
+            ctx.rotate(this.to.toAngle() * Math.PI / 2);
+            ctx.rect(-10, -10, this.visible * 20, 20);
+            ctx.rotate(-this.to.toAngle() * Math.PI / 2);
+            ctx.clip();
+        }
+
         for (let i = 2; i--;) {
             const width = 6 + i;
-
-            const isStraight = this.from.isOpposite(this.to);
 
             let gradient;
             if (isStraight) {
