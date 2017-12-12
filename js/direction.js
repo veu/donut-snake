@@ -16,7 +16,15 @@ class Direction {
         return this.x == -dir.x && this.y == -dir.y;
     }
 
+    isLeft(dir) {
+        return -this.y == dir.x && this.x == dir.y;
+    }
+
+    isRight(dir) {
+        return this.y == dir.x && -this.x == dir.y;
+    }
+
     toAngle() {
-        return (this.x ? this.x + 1 : this.y + 2) * Math.PI / 2;
+        return (this.x ? this.x + 1 : this.y + 2);
     }
 }

@@ -17,9 +17,13 @@ class Tween {
     }
 
     update() {
-        const distance = this.to - this.from;
+        if (++ this.step < this.duration) {
+            const distance = this.to - this.from;
+            this.target[this.property] = this.from + distance * this.ease(this.step / this.duration);
+        } else {
+            this.target[this.property] = this.to;
+        }
 
-        this.target[this.property] = this.from + this.ease(distance / this.duration * this.step);
 
         this.step ++;
     }

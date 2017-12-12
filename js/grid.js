@@ -113,4 +113,8 @@ class Grid {
 
         this.screen.remove(view);
     }
+
+    isOccupied({x, y}) {
+        return this.state.grid[x + y * 5] === null;
+    }
 }

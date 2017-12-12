@@ -15,17 +15,16 @@ class Snake {
         };
 
         if (this.headView) {
-            this.screen.remove(this.headView);
+            game.screen.remove(this.headView);
         }
+
+        this.updateTurn();
         this.headView = new SnakeHeadView(this.get(0));
     }
 
     load() {
+        this.updateTurn();
         this.headView = new SnakeHeadView(this.get(0));
-    }
-
-    isOccupied(pos) {
-        return this.state.snake.positions.some(p => p.x == pos.x && p.y == pos.y);
     }
 
     getNextPosition(dir) {
@@ -41,15 +40,20 @@ class Snake {
             y: to.y,
         });
 
-        this.headView.update(this.get(0));
+        let result;
 
         if (to.isDonut) {
             this.state.snake.colors.unshift(to.color);
 
-            return {digested: false};
+            result = {digested: false};
+        } else {
+            result = this.digest(to.color);
         }
 
-        return this.digest(to.color);
+        this.updateTurn();
+        this.headView.move(this.get(0));
+
+        return result;
     }
 
     digest(color) {
@@ -76,7 +80,7 @@ class Snake {
         const {colors, positions} = this.state.snake;
         const prev = positions[i - 1];
         const next = positions[+i + 1];
-        return {
+        const part = {
             x: positions[i].x,
             y: positions[i].y,
             color: colors[i - 1],
@@ -93,5 +97,31 @@ class Snake {
                 color: colors[i],
             },
         };
+
+        if (part.isHead) {
+            part.turn = this.turn;
+        }
+
+        return part;
+    }
+
+    updateTurn() {
+        const positions = this.state.snake.positions;
+        if (positions.length < 3) {
+            this.turn = 0;
+            return;
+        }
+
+        const to = new Direction(
+            positions[1].x - positions[0].x,
+            positions[1].y - positions[0].y
+        );
+
+        const to2 = new Direction(
+            positions[2].x - positions[1].x,
+            positions[2].y - positions[1].y
+        );
+
+        this.turn = to.isLeft(to2) ? -1 : to.isRight(to2) ? 1 : 0;
     }
 }

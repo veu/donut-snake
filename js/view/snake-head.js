@@ -1,30 +1,68 @@
 class SnakeHeadView {
     constructor(part) {
-        this.part = part;
+        this.x = part.x * 20 + 10;
+        this.y = part.y * 20 + 10;
+        this.turn = part.turn;
+        this.to = new Direction(
+            part.next.x - part.x,
+            part.next.y - part.y
+        );
+        this.angle = this.to.toAngle();
 
         game.screen.add(this);
     }
 
-    update(part) {
-        this.part = part;
+    move(part) {
+        game.screen.removeTweens(this);
+
+        this.x = part.x * 20 + 10;
+        this.y = part.y * 20 + 10;
+        this.turn = part.turn;
+        this.to = new Direction(
+            part.next.x - part.x,
+            part.next.y - part.y
+        );
+
+        game.screen.addTween(this, 'angle', {
+            duration: 20,
+            ease: 'inout',
+            to: this.angle + this.getDifference(this.angle, this.to.toAngle()),
+        });
+
+        if (!this.turn) {
+            game.screen.addTween(this, 'x', {
+                duration: 20,
+                ease: 'inout',
+                from: this.x + this.to.x * 20,
+                to: this.x,
+            });
+            game.screen.addTween(this, 'y', {
+                duration: 20,
+                ease: 'inout',
+                from: this.y + this.to.y * 20,
+                to: this.y,
+            });
+        }
+    }
+
+    getDifference(a, b) {
+        const diff = b % 4 - a % 4;
+        const distance = Math.abs(diff);
+        return distance > 2 ? (2 - distance) * Math.sign(diff) : diff;
     }
 
     draw(ctx) {
         ctx.save();
-        ctx.translate(this.part.x * 20 + 10, this.part.y * 20 + 10);
 
-        const from = this.part.prev && new Direction(
-            this.part.prev.x - this.part.x,
-            this.part.prev.y - this.part.y
-        );
+        ctx.translate(this.x + this.to.x * 10, this.y + this.to.y * 10);
 
-        const to = this.part.next && new Direction(
-            this.part.next.x - this.part.x,
-            this.part.next.y - this.part.y
-        );
+        const ref = this.turn ? this.turn > 0 ? this.to.ccw() : this.to.cw() : {x: 0, y: 0};
+        ctx.translate(ref.x * 10, ref.y * 10);
+        ctx.rotate((this.angle) * Math.PI / 2);
+        if (this.turn) ctx.translate(0, -this.turn * 10);
 
-        ctx.rotate(to.toAngle());
-        ctx.scale(1.5,1);
+        ctx.translate(10, 0);
+        ctx.scale(1.5, 1);
 
         ctx.beginPath();
         ctx.arc(-3, 0, 8, Math.PI * .5 + .5, Math.PI * 1.5 - .5, 1);

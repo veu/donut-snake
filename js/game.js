@@ -45,13 +45,13 @@ class Game {
     }
 
     move(dir) {
-        if (this.state.moves == 0) return;
+        const next = this.snake.getNextPosition(dir);
 
-        const cell = this.grid.get(this.snake.getNextPosition(dir));
-
-        if (this.snake.isOccupied(cell)) {
+        if (this.state.moves == 0 || this.grid.isOccupied(next)) {
             return;
         }
+
+        const cell = this.grid.get(next);
 
         -- this.state.moves;
 

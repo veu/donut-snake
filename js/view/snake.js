@@ -29,7 +29,7 @@ class SnakeView {
 
         if (part.isTail) {
             ctx.translate(10, 10);
-            ctx.rotate(from.toAngle());
+            ctx.rotate(from.toAngle() * Math.PI / 2);
             ctx.scale(2, 1);
 
             ctx.beginPath();
