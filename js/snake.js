@@ -1,7 +1,8 @@
 class Snake {
     constructor(game) {
         this.state = game.state;
-        this.view = new SnakeView(game.screen, this);
+
+        this.view = new SnakeView(this);
     }
 
     init() {
@@ -12,6 +13,15 @@ class Snake {
                 {x: 2, y: 3},
             ],
         };
+
+        if (this.headView) {
+            this.screen.remove(this.headView);
+        }
+        this.headView = new SnakeHeadView(this.get(0));
+    }
+
+    load() {
+        this.headView = new SnakeHeadView(this.get(0));
     }
 
     isOccupied(pos) {
@@ -30,6 +40,8 @@ class Snake {
             x: to.x,
             y: to.y,
         });
+
+        this.headView.update(this.get(0));
 
         if (to.isDonut) {
             this.state.snake.colors.unshift(to.color);
@@ -55,28 +67,31 @@ class Snake {
     }
 
     *iterate() {
-        const {colors, positions} = this.state.snake;
-
-        for (let i in positions) {
-            const prev = positions[i - 1];
-            const next = positions[+i + 1];
-            yield {
-                x: positions[i].x,
-                y: positions[i].y,
-                color: colors[i - 1],
-                isHead: i == 0,
-                isTail: i == positions.length - 1,
-                prev: prev && {
-                    x: prev.x,
-                    y: prev.y,
-                    color: colors[i - 2],
-                },
-                next: next && {
-                    x: next.x,
-                    y: next.y,
-                    color: colors[i],
-                },
-            };
+        for (let i in this.state.snake.positions) {
+            yield this.get(i);
         }
+    }
+
+    get(i) {
+        const {colors, positions} = this.state.snake;
+        const prev = positions[i - 1];
+        const next = positions[+i + 1];
+        return {
+            x: positions[i].x,
+            y: positions[i].y,
+            color: colors[i - 1],
+            isHead: i == 0,
+            isTail: i == positions.length - 1,
+            prev: prev && {
+                x: prev.x,
+                y: prev.y,
+                color: colors[i - 2],
+            },
+            next: next && {
+                x: next.x,
+                y: next.y,
+                color: colors[i],
+            },
+        };
     }
 }

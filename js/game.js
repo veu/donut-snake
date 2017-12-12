@@ -3,7 +3,9 @@ class Game {
         this.state = {};
 
         this.screen = new Screen(this);
+    }
 
+    init() {
         this.grid = new Grid(this);
         this.snake = new Snake(this);
     }
@@ -31,6 +33,7 @@ class Game {
 
             if (this.state.moves > 0) {
                 this.grid.load();
+                this.snake.load();
                 return;
             }
         } catch (e) { console.error(e); }

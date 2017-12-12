@@ -1,8 +1,8 @@
 class SnakeView {
-    constructor(screen, snake) {
+    constructor(snake) {
         this.snake = snake;
 
-        screen.add(this);
+        game.screen.add(this);
     }
 
     draw(ctx) {
@@ -12,6 +12,8 @@ class SnakeView {
     }
 
     drawPart(ctx, part) {
+        if (part.isHead) return;
+
         ctx.save();
         ctx.translate(part.x * 20, part.y * 20);
 
@@ -25,33 +27,7 @@ class SnakeView {
             part.next.y - part.y
         );
 
-        if (part.isHead) {
-            ctx.translate(10, 10);
-            ctx.rotate(to.toAngle());
-            ctx.scale(1.5,1);
-
-            ctx.beginPath();
-            ctx.arc(-3, 0, 8, Math.PI * .5 + .5, Math.PI * 1.5 - .5, 1);
-
-            const gradient = ctx.createRadialGradient(
-                0, 0, 1,
-                0, 0, 9
-            );
-            gradient.addColorStop(0, '#fc8');
-            gradient.addColorStop(1, '#eb6');
-            ctx.fillStyle = gradient;
-            ctx.fill();
-
-            ctx.beginPath();
-            ctx.ellipse(0, 4, 1.8, .8, -.3, 6, 3.8, 0);
-            ctx.fillStyle = '#000';
-            ctx.fill();
-
-            ctx.beginPath();
-            ctx.ellipse(0, -4, 1.8, .8, .3, 6.8, 2.5, 1);
-            ctx.fillStyle = '#000';
-            ctx.fill();
-        } else if (part.isTail) {
+        if (part.isTail) {
             ctx.translate(10, 10);
             ctx.rotate(from.toAngle());
             ctx.scale(2, 1);
