@@ -30,6 +30,15 @@ class Screen {
 
     remove(object) {
         this.objects = this.objects.filter(o => o !== object);
+        this.tweens = this.tweens.filter(tween => {
+            if (tween.target !== object) {
+                return true;
+            }
+
+            tween.end();
+
+            return false;
+        });
     }
 
     addTween(target, property, options) {
