@@ -1,18 +1,13 @@
-class SnakeView {
-    constructor(snake) {
-        this.snake = snake;
+class SnakeBodyView {
+    constructor(part) {
+        this.part = part;
 
         game.screen.add(this);
     }
 
     draw(ctx) {
-        for (const part of this.snake.iterate()) {
-            if (part.isHead || part.isTail) continue;
-            this.drawPart(ctx, part);
-        }
-    }
+        const part = this.part;
 
-    drawPart(ctx, part) {
         const from = new Direction(
             part.prev.x - part.x,
             part.prev.y - part.y
