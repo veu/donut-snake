@@ -40,20 +40,14 @@ class Snake {
             y: to.y,
         });
 
-        let result;
-
-        if (to.isDonut) {
-            this.state.snake.colors.unshift(to.color);
-
-            result = {digested: false};
-        } else {
-            result = this.digest(to.color);
-        }
+        this.state.snake.colors.unshift(to.isDonut ? to.color : undefined);
 
         this.updateTurn();
         this.headView.move(this.get(0));
+    }
 
-        return result;
+    drink(to) {
+        return this.digest(to.color);
     }
 
     digest(color) {

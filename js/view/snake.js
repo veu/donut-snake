@@ -139,6 +139,8 @@ class SnakeView {
                 );
             }
             ctx.fill();
+
+            if (part.color === undefined) break;
         }
 
         ctx.restore();

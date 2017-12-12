@@ -44,7 +44,10 @@ class Game {
         this.start();
     }
 
-    move(dir) {
+    async move(dir) {
+        if (this.locked) return;
+        this.locked = true;
+
         const next = this.snake.getNextPosition(dir);
 
         if (this.state.moves == 0 || this.grid.isOccupied(next)) {
@@ -57,17 +60,31 @@ class Game {
 
         this.grid.empty(cell);
 
-        const result = this.snake.move(cell);
+        this.snake.move(cell);
 
-        if (result.digested) {
-            result.emptyCells.forEach(cell => this.grid.roll(cell));
+        await this.wait(15);
 
-            const delta = result.colorCount;
-            this.state.score += delta * (delta + 1) / 2;
-            this.state.highScore = Math.max(this.state.score, this.state.highScore);
-            this.state.moves += delta * 2;
+        if (!cell.isDonut) {
+            const result = this.snake.drink(cell);
+
+            if (result.digested) {
+                result.emptyCells.forEach(cell => this.grid.roll(cell));
+
+                const delta = result.colorCount;
+                this.state.score += delta * (delta + 1) / 2;
+                this.state.highScore = Math.max(this.state.score, this.state.highScore);
+                this.state.moves += delta * 2;
+            }
         }
 
         this.save();
+
+        this.locked = false;
+    }
+
+    wait(ticks) {
+        return new Promise((resolve) => {
+            setTimeout(resolve, 1000 / 30 * ticks);
+        });
     }
 }
