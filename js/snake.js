@@ -16,15 +16,18 @@ class Snake {
 
         if (this.headView) {
             game.screen.remove(this.headView);
+            game.screen.remove(this.tailView);
         }
 
         this.updateTurn();
         this.headView = new SnakeHeadView(this.get(0));
+        this.tailView = new SnakeTailView(this.get(1));
     }
 
     load() {
         this.updateTurn();
         this.headView = new SnakeHeadView(this.get(0));
+        this.tailView = new SnakeTailView(this.get(this.state.snake.positions.length - 1));
     }
 
     getNextPosition(dir) {
@@ -47,7 +50,9 @@ class Snake {
     }
 
     drink(to) {
-        return this.digest(to.color);
+        const result = this.digest(to.color);
+        this.tailView.move(this.get(this.state.snake.positions.length - 1));
+        return result;
     }
 
     digest(color) {
