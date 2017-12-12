@@ -45,7 +45,7 @@ class Screen {
 
     tick() {
         for (const tween of this.tweens) {
-            tween.tick();
+            tween.update();
         }
 
         this.tweens = this.tweens.filter(tween => tween.isAlive());

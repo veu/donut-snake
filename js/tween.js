@@ -8,12 +8,18 @@ class Tween {
         this.duration = options.duration || 30;
 
         this.step = 1;
+
+        this.ease = {
+            in: t => t * t,
+            out: t => (2 - t) * t,
+            inout: t => t < .5 ? t * t * 2 : (2 - t) * t * 2 - 1,
+        }[options.ease || 'in'];
     }
 
-    tick() {
+    update() {
         const distance = this.to - this.from;
 
-        this.target[this.property] = this.from + (distance / this.duration * this.step);
+        this.target[this.property] = this.from + this.ease(distance / this.duration * this.step);
 
         this.step ++;
     }
@@ -26,3 +32,4 @@ class Tween {
         return this.step < this.duration;
     }
 }
+
