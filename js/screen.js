@@ -6,8 +6,9 @@ class Screen {
         this.ctx = this.canvas.getContext('2d');
 
         this.objects = [];
+        this.tweens = [];
 
-        setInterval(() => this.draw(), 1000 / 30);
+        setInterval(() => this.tick(), 1000 / 30);
     }
 
     resize() {
@@ -29,6 +30,27 @@ class Screen {
 
     remove(object) {
         this.objects = this.objects.filter(o => o !== object);
+    }
+
+    addTween(target, property, options) {
+        this.tweens.push(new Tween(target, property, options));
+    }
+
+    reset() {
+        for (const tween in this.tweens) {
+            tween.end();
+        }
+        this.tweens = [];
+    }
+
+    tick() {
+        for (const tween of this.tweens) {
+            tween.tick();
+        }
+
+        this.tweens = this.tweens.filter(tween => tween.isAlive());
+
+        this.draw();
     }
 
     draw() {

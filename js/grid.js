@@ -1,12 +1,18 @@
 class Grid {
     constructor(game) {
         this.state = game.state;
+        this.screen = game.screen;
 
-        this.view = new GridView(game.screen, this);
+        this.views = [];
     }
 
     init() {
+        for (const view of this.views) {
+            this.screen.remove(view);
+        }
+
         this.state.grid = [];
+        this.views = [];
 
         for(let y = 5; y--;) {
             for(let x = 5; x--;) {
@@ -17,6 +23,18 @@ class Grid {
                 }
 
                 this.roll({x, y});
+            }
+        }
+    }
+
+    load() {
+        for(let y = 5; y--;) {
+            for(let x = 5; x--;) {
+                const cell = this.get({x, y});
+
+                if (cell) {
+                    this.addView(cell);
+                }
             }
         }
     }
@@ -38,9 +56,13 @@ class Grid {
 
     roll({x, y}) {
         this.state.grid[x + y * 5] = this.getRandomColor(x, y);
+
+        const cell = this.get({x, y});
+        this.addView(cell);
     }
 
     empty({x, y}) {
+        this.removeView({x, y});
         this.state.grid[x + y * 5] = null;
     }
 
@@ -77,5 +99,18 @@ class Grid {
         }
 
         return neighbors;
+    }
+
+    addView(cell) {
+        const view = cell.isDonut ? new DonutView(cell) : new DrinkView(cell);
+
+        this.views[cell.x + cell.y * 5] = view;
+        this.screen.add(view);
+    }
+
+    removeView(cell) {
+        const view = this.views[cell.x + cell.y * 5];
+
+        this.screen.remove(view);
     }
 }

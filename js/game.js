@@ -30,6 +30,7 @@ class Game {
             for (const key in savedState) this.state[key] = savedState[key];
 
             if (this.state.moves > 0) {
+                this.grid.load();
                 return;
             }
         } catch (e) { console.error(e); }
