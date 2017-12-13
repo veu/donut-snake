@@ -1,7 +1,7 @@
 class SnakeHeadView {
     constructor(part) {
-        this.x = part.x * 20 + 10;
-        this.y = part.y * 20 + 10;
+        this.x = part.x;
+        this.y = part.y;
         this.turn = part.turn;
         this.to = new Direction(
             part.next.x - part.x,
@@ -15,8 +15,8 @@ class SnakeHeadView {
     move(part) {
         game.screen.removeTweens(this);
 
-        this.x = part.x * 20 + 10;
-        this.y = part.y * 20 + 10;
+        this.x = part.x;
+        this.y = part.y;
         this.turn = part.turn;
         this.to = new Direction(
             part.next.x - part.x,
@@ -33,13 +33,13 @@ class SnakeHeadView {
             game.screen.addTween(this, 'x', {
                 duration: 20,
                 ease: 'inout',
-                from: this.x + this.to.x * 20,
+                from: this.x + this.to.x,
                 to: this.x,
             });
             game.screen.addTween(this, 'y', {
                 duration: 20,
                 ease: 'inout',
-                from: this.y + this.to.y * 20,
+                from: this.y + this.to.y,
                 to: this.y,
             });
         }
@@ -52,9 +52,21 @@ class SnakeHeadView {
     }
 
     draw(ctx) {
+        this.drawAt(ctx, this.x, this.y);
+
+        if (this.y + this.to.y < -1 || this.y + this.to.y > 5) {
+            this.drawAt(ctx, this.x, this.y - this.to.y * 5);
+        }
+
+        if (this.x + this.to.x < -1 || this.x + this.to.x > 5) {
+            this.drawAt(ctx, this.x - this.to.x * 5, this.y);
+        }
+    }
+
+    drawAt(ctx, x, y) {
         ctx.save();
 
-        ctx.translate(this.x + this.to.x * 10, this.y + this.to.y * 10);
+        ctx.translate(x * 20 + 10 + this.to.x * 10, y * 20 + 10 + this.to.y * 10);
 
         const ref = this.turn ? this.turn > 0 ? this.to.ccw() : this.to.cw() : {x: 0, y: 0};
         ctx.translate(ref.x * 10, ref.y * 10);

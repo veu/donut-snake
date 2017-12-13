@@ -81,6 +81,11 @@ class Screen {
         this.drawStats(this.game.state.moves, this.game.state.score, this.game.state.highScore);
 
         this.ctx.restore();
+
+        this.ctx.clearRect(0, 0, 120, 10);
+        this.ctx.clearRect(0, 0, 10, 120);
+        this.ctx.clearRect(0, 110, 120, 10);
+        this.ctx.clearRect(110, 0, 10, 120);
     }
 
     drawStats(moves, score, highScore) {
