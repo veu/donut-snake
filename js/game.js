@@ -62,9 +62,9 @@ class Game {
 
         this.snake.move(cell);
 
-        await this.wait(15);
-
         if (!cell.isDonut) {
+            await this.wait(15);
+
             const result = this.snake.drink(cell);
 
             if (result.digested) {
