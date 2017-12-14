@@ -22,13 +22,11 @@ class Snake {
             }
         }
 
-        this.updateTurn();
         this.headView = new SnakeHeadView(this.get(0));
         this.tailView = new SnakeTailView(this.get(1));
     }
 
     load() {
-        this.updateTurn();
         this.headView = new SnakeHeadView(this.get(0));
         this.tailView = new SnakeTailView(this.get(this.state.snake.positions.length - 1));
 
@@ -53,7 +51,6 @@ class Snake {
         this.state.snake.colors.unshift(to.isDonut ? to.color : undefined);
         this.bodyViews.push(new SnakeBodyView(this.get(1), true));
 
-        this.updateTurn();
         this.headView.move(this.get(0));
         this.tailView.move(this.get(this.state.snake.positions.length - 1));
     }
@@ -109,32 +106,29 @@ class Snake {
                 y: next.y,
                 color: colors[i],
             },
+            turn: this.getTurn(i)
         };
-
-        if (part.isHead) {
-            part.turn = this.turn;
-        }
 
         return part;
     }
 
-    updateTurn() {
+    getTurn(i) {
         const positions = this.state.snake.positions;
-        if (positions.length < 3) {
-            this.turn = 0;
-            return;
+        if (i == 0) i++;
+        if (!positions[i + 1]) {
+            return 0;
         }
 
         const to = new Direction(
-            positions[1].x - positions[0].x,
-            positions[1].y - positions[0].y
+            positions[i].x - positions[i - 1].x,
+            positions[i].y - positions[i - 1].y
         );
 
         const to2 = new Direction(
-            positions[2].x - positions[1].x,
-            positions[2].y - positions[1].y
+            positions[i + 1].x - positions[i].x,
+            positions[i + 1].y - positions[i].y
         );
 
-        this.turn = to.isLeft(to2) ? -1 : to.isRight(to2) ? 1 : 0;
+        return to.isLeft(to2) ? -1 : to.isRight(to2) ? 1 : 0;
     }
 }

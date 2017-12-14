@@ -3,6 +3,7 @@ class SnakeBodyView {
         this.x = part.x;
         this.y = part.y;
         this.color = part.color;
+        this.turn = part.turn;
 
         this.from = new Direction(
             part.prev.x - part.x,
@@ -28,11 +29,22 @@ class SnakeBodyView {
 
         const isStraight = this.from.isOpposite(this.to);
 
-        if (this.visible < 1 && isStraight) {
+        if (this.visible < 1) {
             ctx.beginPath();
-            ctx.rotate(this.to.toAngle() * Math.PI / 2);
-            ctx.rect(-10, -10, this.visible * 20, 20);
-            ctx.rotate(-this.to.toAngle() * Math.PI / 2);
+            if(isStraight) {
+                ctx.rotate(this.to.toAngle() * Math.PI / 2);
+                ctx.rect(-10, -10, this.visible * 20, 20);
+                ctx.rotate(-this.to.toAngle() * Math.PI / 2);
+            } else {
+                ctx.save();
+                ctx.translate(
+                    (this.from.x || this.to.x) * 10,
+                    (this.from.y || this.to.y) * 10
+                );
+                ctx.rotate((this.to.toAngle() * 0 - this.turn + this.visible * this.turn) * Math.PI / 2);
+                ctx.rect(10 - (this.from.x || this.to.x) * 10, 10 - (this.from.y || this.to.y) * 10, -20, -20);
+                ctx.restore();
+            }
             ctx.clip();
         }
 
