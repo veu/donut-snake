@@ -55,6 +55,7 @@ class Snake {
 
         this.updateTurn();
         this.headView.move(this.get(0));
+        this.tailView.move(this.get(this.state.snake.positions.length - 1));
     }
 
     drink(to) {
