@@ -1,23 +1,20 @@
 class Grid {
-    constructor(game) {
-        this.state = game.state;
-        this.screen = game.screen;
-
+    constructor() {
         this.views = [];
     }
 
     init() {
         for (const view of this.views) {
-            this.screen.remove(view);
+            game.screen.remove(view);
         }
 
-        this.state.grid = [];
+        game.state.grid = [];
         this.views = [];
 
         for(let y = 5; y--;) {
             for(let x = 5; x--;) {
                 if (x == 2 && (y >= 2 && y <= 4)) {
-                    this.state.grid[x + y * 5] = null;
+                    game.state.grid[x + y * 5] = null;
 
                     continue;
                 }
@@ -40,7 +37,7 @@ class Grid {
     }
 
     get({x, y}) {
-        const value = this.state.grid[x + y * 5];
+        const value = game.state.grid[x + y * 5];
 
         if (value === null) {
             return;
@@ -55,7 +52,7 @@ class Grid {
     }
 
     roll({x, y}) {
-        this.state.grid[x + y * 5] = this.getRandomColor(x, y);
+        game.state.grid[x + y * 5] = this.getRandomColor(x, y);
 
         const cell = this.get({x, y});
         this.addView(cell);
@@ -63,7 +60,7 @@ class Grid {
 
     empty({x, y}) {
         this.removeView({x, y});
-        this.state.grid[x + y * 5] = null;
+        game.state.grid[x + y * 5] = null;
     }
 
     *iterate() {
@@ -92,8 +89,8 @@ class Grid {
         for (let x = -1; x < 2; x++) {
             for (let y = -1; y < 2; y++) {
                 const index = (x + midX + 5) % 5 + (y + midY + 5) % 5 * 5;
-                if ((x || y) && this.state.grid[index] !== undefined) {
-                    neighbors.push(this.state.grid[index]);
+                if ((x || y) && game.state.grid[index] !== undefined) {
+                    neighbors.push(game.state.grid[index]);
                 }
             }
         }
@@ -105,16 +102,16 @@ class Grid {
         const view = cell.isDonut ? new DonutView(cell) : new DrinkView(cell);
 
         this.views[cell.x + cell.y * 5] = view;
-        this.screen.add(view);
+        game.screen.add(view);
     }
 
     removeView(cell) {
         const view = this.views[cell.x + cell.y * 5];
 
-        this.screen.remove(view);
+        game.screen.remove(view);
     }
 
     isOccupied({x, y}) {
-        return this.state.grid[x + y * 5] === null;
+        return game.state.grid[x + y * 5] === null;
     }
 }

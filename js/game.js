@@ -6,8 +6,8 @@ class Game {
     }
 
     init() {
-        this.grid = new Grid(this);
-        this.snake = new Snake(this);
+        this.grid = new Grid();
+        this.snake = new Snake();
     }
 
     start() {
