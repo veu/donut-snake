@@ -24,20 +24,20 @@ class SnakeHeadView {
         );
 
         game.screen.addTween(this, 'angle', {
-            duration: 20,
+            duration: 10,
             ease: 'inout',
             to: this.angle + this.getDifference(this.angle, this.to.toAngle()),
         });
 
         if (!this.turn) {
             game.screen.addTween(this, 'x', {
-                duration: 20,
+                duration: 10,
                 ease: 'inout',
                 from: this.x + this.to.x,
                 to: this.x,
             });
             game.screen.addTween(this, 'y', {
-                duration: 20,
+                duration: 10,
                 ease: 'inout',
                 from: this.y + this.to.y,
                 to: this.y,

@@ -17,7 +17,7 @@ class SnakeBodyView {
 
         this.visible = animate ? 0 : 1;
         if (animate) {
-            game.screen.addTween(this, 'visible', {to: 1, ease: 'inout', duration: 20});
+            game.screen.addTween(this, 'visible', {to: 1, ease: 'inout', duration: 10});
         }
 
         game.screen.add(this);
