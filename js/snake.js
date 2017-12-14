@@ -11,6 +11,7 @@ class Snake {
             positions: [
                 {x: 2, y: 2},
                 {x: 2, y: 3},
+                {x: 2, y: 4},
             ],
         };
 
@@ -23,7 +24,8 @@ class Snake {
         }
 
         this.headView = new SnakeHeadView(this.get(0));
-        this.tailView = new SnakeTailView(this.get(1));
+        this.bodyViews = [new SnakeBodyView(this.get(1))];
+        this.tailView = new SnakeTailView(this.get(2));
     }
 
     load() {
@@ -33,6 +35,8 @@ class Snake {
         for (const i in this.state.snake.colors) {
             this.bodyViews.push(new SnakeBodyView(this.get(+i + 1)));
         }
+
+        this.bodyViews.push(new SnakeBodyView(this.get(this.state.snake.positions.length - 2)));
     }
 
     getNextPosition(dir) {
@@ -63,15 +67,16 @@ class Snake {
 
     digest(color) {
         const colorCount = this.state.snake.colors.filter(c => c === color).length;
-        const emptyCells = this.state.snake.positions.slice(2);
+        const emptyCells = this.state.snake.positions.slice(3);
 
         this.state.snake.colors = [];
-        this.state.snake.positions = this.state.snake.positions.slice(0, 2);
+        this.state.snake.positions = this.state.snake.positions.slice(0, 3);
 
         for (const view of this.bodyViews) {
             game.screen.remove(view);
         }
-        this.bodyViews = [];
+
+        this.bodyViews = [new SnakeBodyView(this.get(1))]
 
         return {
             colorCount,
