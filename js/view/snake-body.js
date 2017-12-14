@@ -50,6 +50,7 @@ class SnakeBodyView {
 
         for (let i = 2; i--;) {
             const width = 6 + i;
+            const backWidth = this.color !== undefined ? width : width - 1;
 
             let gradient;
             if (isStraight) {
@@ -82,20 +83,20 @@ class SnakeBodyView {
             );
             if (isStraight) {
                 ctx.lineTo(
-                    this.to.x * 10 + this.to.cw().x * width,
-                    this.to.y * 10 + this.to.cw().y * width
+                    this.to.x * 10 + this.to.cw().x * backWidth,
+                    this.to.y * 10 + this.to.cw().y * backWidth
                 );
             } else {
                 ctx.quadraticCurveTo(
                     (this.from.ccw().x || this.to.cw().x) * width,
                     (this.from.ccw().y || this.to.cw().y) * width,
-                    this.to.x * 10 + this.to.cw().x * width,
-                    this.to.y * 10 + this.to.cw().y * width
+                    this.to.x * 10 + this.to.cw().x * backWidth,
+                    this.to.y * 10 + this.to.cw().y * backWidth
                 );
             }
             ctx.lineTo(
-                this.to.x * 10 + this.to.ccw().x * width,
-                this.to.y * 10 + this.to.ccw().y * width
+                this.to.x * 10 + this.to.ccw().x * backWidth,
+                this.to.y * 10 + this.to.ccw().y * backWidth
             );
             if (isStraight) {
                 ctx.lineTo(
