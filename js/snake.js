@@ -66,7 +66,7 @@ class Snake {
     }
 
     digest(color) {
-        const colorCount = this.state.snake.colors.filter(c => c === color).length;
+        const colorCount = this.state.snake.colors.filter(c => c === color).length - 1;
         const emptyCells = this.state.snake.positions.slice(3);
 
         this.state.snake.colors = [];
