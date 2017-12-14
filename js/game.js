@@ -51,6 +51,7 @@ class Game {
         const next = this.snake.getNextPosition(dir);
 
         if (this.state.moves == 0 || this.grid.isOccupied(next)) {
+            this.locked = false;
             return;
         }
 
