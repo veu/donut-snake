@@ -54,11 +54,11 @@ class SnakeHeadView {
     draw(ctx) {
         this.drawAt(ctx, this.x, this.y);
 
-        if (this.y + this.to.y < -1 || this.y + this.to.y > 5) {
+        if (this.y + this.to.y <= -1 || this.y + this.to.y >= 5) {
             this.drawAt(ctx, this.x, this.y - this.to.y * 5);
         }
 
-        if (this.x + this.to.x < -1 || this.x + this.to.x > 5) {
+        if (this.x + this.to.x <= -1 || this.x + this.to.x >= 5) {
             this.drawAt(ctx, this.x - this.to.x * 5, this.y);
         }
     }
