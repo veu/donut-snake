@@ -46,7 +46,7 @@ class SnakeHeadView {
     }
 
     getDifference(a, b) {
-        const diff = b % 4 - a % 4;
+        const diff = (b % 4 + 4) % 4 - (a % 4 + 4) % 4;
         const distance = Math.abs(diff);
         return distance > 2 ? (2 - distance) * Math.sign(diff) : diff;
     }
