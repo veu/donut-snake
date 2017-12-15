@@ -76,7 +76,7 @@ class Game {
                     this.state.highScore = Math.max(this.state.score, this.state.highScore);
                     this.state.moves += 2;
                 }
-                await this.wait(5);
+                await this.wait(10);
             }
         }
 

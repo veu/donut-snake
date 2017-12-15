@@ -6,6 +6,7 @@ class Tween {
         this.from = options.from || this.target[this.property];
         this.to = options.to || 0;
         this.duration = options.duration || 30;
+        this.remove = options.remove || false;
 
         this.step = 1;
 

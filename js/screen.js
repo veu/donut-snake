@@ -63,7 +63,17 @@ class Screen {
             tween.update();
         }
 
-        this.tweens = this.tweens.filter(tween => tween.isAlive());
+        this.tweens = this.tweens.filter(tween => {
+            if (tween.isAlive()) {
+                return true;
+            }
+
+            if (tween.remove) {
+                this.remove(tween.target);
+            }
+
+            return false;
+        });
 
         this.draw();
     }

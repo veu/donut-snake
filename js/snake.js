@@ -69,7 +69,7 @@ class Snake {
 
         const bodyView = this.bodyViews.find(view => removedPos.x == view.x && removedPos.y == view.y);
         this.bodyViews = this.bodyViews.filter(view => view !== bodyView);
-        game.screen.remove(bodyView);
+        bodyView.hide();
 
         const lastBodyView = this.bodyViews.find(view => lastBodyPos.x == view.x && lastBodyPos.y == view.y);
         lastBodyView.move(removedPos);

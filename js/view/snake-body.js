@@ -17,6 +17,7 @@ class SnakeBodyView {
         );
 
         this.visible = animate ? 0 : 1;
+        this.hiding = false;
         if (animate) {
             game.screen.addTween(this, 'visible', {to: 1, ease: 'inout', duration: 10});
         }
@@ -38,8 +39,13 @@ class SnakeBodyView {
             part.next.x - part.x,
             part.next.y - part.y
         );
+    }
 
+    hide() {
         this.visible = 1;
+        this.hiding = true;
+        game.screen.addTween(this, 'visible', {to: 0, ease: 'inout', duration: 10, remove: true});
+
     }
 
     draw(ctx) {
@@ -52,7 +58,7 @@ class SnakeBodyView {
             ctx.beginPath();
             if(isStraight) {
                 ctx.rotate(this.to.toAngle() * Math.PI / 2);
-                ctx.rect(-10, -10, this.visible * 20, 20);
+                ctx.rect(-10 + (this.hiding ? 1 - this.visible : 0) * 20, -10, this.visible * 20, 20);
                 ctx.rotate(-this.to.toAngle() * Math.PI / 2);
             } else {
                 ctx.save();
@@ -60,7 +66,7 @@ class SnakeBodyView {
                     (this.from.x || this.to.x) * 10,
                     (this.from.y || this.to.y) * 10
                 );
-                ctx.rotate((this.to.toAngle() * 0 - this.turn + this.visible * this.turn) * Math.PI / 2);
+                ctx.rotate((this.hiding ? 1 - this.visible : this.visible - 1) * this.turn * Math.PI / 2);
                 ctx.rect(10 - (this.from.x || this.to.x) * 10, 10 - (this.from.y || this.to.y) * 10, -20, -20);
                 ctx.restore();
             }
