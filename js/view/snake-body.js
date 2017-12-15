@@ -24,6 +24,24 @@ class SnakeBodyView {
         game.screen.add(this);
     }
 
+    move(part) {
+        this.x = part.x;
+        this.y = part.y;
+        this.turn = part.turn;
+
+        this.from = new Direction(
+            part.prev.x - part.x,
+            part.prev.y - part.y
+        );
+
+        this.to = new Direction(
+            part.next.x - part.x,
+            part.next.y - part.y
+        );
+
+        this.visible = 1;
+    }
+
     draw(ctx) {
         ctx.save();
         ctx.translate(this.x * 20 + 10, this.y * 20 + 10);

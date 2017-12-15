@@ -66,18 +66,17 @@ class Game {
         this.grid.empty(cell);
 
         if (!cell.isDonut) {
-            await this.wait(5);
-
-            const result = this.snake.drink(cell);
-
-            if (result.digested) {
-                result.emptyCells.forEach(cell => this.grid.roll(cell));
-
-                const delta = result.colorCount;
-                this.state.score += delta * (delta + 1) / 2;
-                this.state.highScore = Math.max(this.state.score, this.state.highScore);
-                this.state.moves += delta * 2;
+            let result;
+            let delta = 0;
+            while (result = this.snake.drink(cell.color)) {
+                this.grid.roll(result.emptyCell);
+                delta += result.colorCount;
+                await this.wait(5);
             }
+
+            this.state.score += delta * (delta + 1) / 2;
+            this.state.highScore = Math.max(this.state.score, this.state.highScore);
+            this.state.moves += delta * 2;
         }
 
         this.save();
