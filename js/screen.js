@@ -19,6 +19,7 @@ class Screen {
 
         document.documentElement.style.setProperty('--scale', this.scale);
 
+        this.scale = ((this.scale * 10) | 0) / 10;
         this.ctx.scale(this.scale, this.scale);
 
         this.ctx.font = '8px sans-serif';
@@ -91,7 +92,7 @@ class Screen {
 
     drawStats(moves, score, highScore) {
         this.ctx.fillStyle = '#f6b';
-        this.ctx.fillRect(-10, 110, 120, 200);
+        this.ctx.fillRect(-20, 110, 140, 200);
         this.ctx.fillStyle = '#200';
         let offset = 125;
 
