@@ -1,6 +1,7 @@
 class DonutView {
     constructor(cell) {
         this.cell = cell;
+        this.z = 4;
 
         this.scale = 0;
         game.screen.addTween(this, 'scale', {to: 1, ease: 'out', duration: 15});

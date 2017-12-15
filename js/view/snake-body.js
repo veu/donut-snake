@@ -2,6 +2,7 @@ class SnakeBodyView {
     constructor(part, animate=false) {
         this.x = part.x;
         this.y = part.y;
+        this.z = 5;
         this.color = part.color;
         this.turn = part.turn;
 

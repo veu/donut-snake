@@ -59,12 +59,14 @@ class Game {
 
         -- this.state.moves;
 
-        this.grid.empty(cell);
-
         this.snake.move(cell);
 
+        await this.wait(10);
+
+        this.grid.empty(cell);
+
         if (!cell.isDonut) {
-            await this.wait(15);
+            await this.wait(5);
 
             const result = this.snake.drink(cell);
 

@@ -1,6 +1,7 @@
 class SnakeTailView {
     constructor(part) {
         this.part = part;
+        this.z = 5;
 
         game.screen.add(this);
     }

@@ -2,6 +2,7 @@ class SnakeHeadView {
     constructor(part) {
         this.x = part.x;
         this.y = part.y;
+        this.z = 5;
         this.turn = part.turn;
         this.to = new Direction(
             part.next.x - part.x,

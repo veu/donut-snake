@@ -26,6 +26,7 @@ class Screen {
 
     add(object) {
         this.objects.push(object);
+        this.objects.sort((a, b) => a.z - b.z);
     }
 
     remove(object) {
