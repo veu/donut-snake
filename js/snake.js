@@ -72,7 +72,8 @@ class Snake {
         bodyView.hide();
 
         const lastBodyView = this.bodyViews.find(view => lastBodyPos.x == view.x && lastBodyPos.y == view.y);
-        lastBodyView.move(removedPos);
+        lastBodyView.hide();
+        this.bodyViews.splice(-2, 1, new SnakeBodyView(this.get(-2), true));
         this.bodyViews[this.bodyViews.length - 1].move(lastBodyPos);
 
         return {

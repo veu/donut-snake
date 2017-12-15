@@ -25,22 +25,6 @@ class SnakeBodyView {
         game.screen.add(this);
     }
 
-    move(part) {
-        this.x = part.x;
-        this.y = part.y;
-        this.turn = part.turn;
-
-        this.from = new Direction(
-            part.prev.x - part.x,
-            part.prev.y - part.y
-        );
-
-        this.to = new Direction(
-            part.next.x - part.x,
-            part.next.y - part.y
-        );
-    }
-
     hide() {
         this.visible = 1;
         this.hiding = true;
@@ -74,8 +58,9 @@ class SnakeBodyView {
         }
 
         for (let i = 2; i--;) {
-            const width = 6 + i;
-            const backWidth = this.color !== undefined ? width : width - 1;
+            const isLast = this.color === undefined;
+            const width = i + (!isLast ? 6 : this.hiding ? 5 + this.visible : 6);
+            const backWidth = i + (!isLast ? 6 : this.hiding ? 5 : 6 - this.visible);
 
             let gradient;
             if (isStraight) {
