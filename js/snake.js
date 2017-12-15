@@ -13,28 +13,27 @@ class Snake {
             ],
         };
 
-        if (this.headView) {
-            game.screen.remove(this.headView);
-            game.screen.remove(this.tailView);
+        if (this.bodyViews.length > 0) {
             for (const view of this.bodyViews) {
                 game.screen.remove(view);
             }
         }
 
-        this.headView = new SnakeHeadView(this.get(0));
-        this.bodyViews = [new SnakeBodyView(this.get(1))];
-        this.tailView = new SnakeTailView(this.get(2));
+        this.bodyViews = [
+            new SnakeHeadView(this.get(0)),
+            new SnakeBodyView(this.get(1)),
+            new SnakeTailView(this.get(2)),
+        ];
     }
 
     load() {
-        this.headView = new SnakeHeadView(this.get(0));
-        this.tailView = new SnakeTailView(this.get(game.state.snake.positions.length - 1));
-
+        this.bodyViews.push(new SnakeHeadView(this.get(0)));
         for (const i in game.state.snake.colors) {
             this.bodyViews.push(new SnakeBodyView(this.get(+i + 1)));
         }
 
         this.bodyViews.push(new SnakeBodyView(this.get(game.state.snake.positions.length - 2)));
+        this.bodyViews.push(new SnakeTailView(this.get(game.state.snake.positions.length - 1)));
     }
 
     getNextPosition(dir) {
@@ -51,8 +50,8 @@ class Snake {
         });
 
         game.state.snake.colors.unshift(to.color);
-        this.bodyViews.push(new SnakeBodyView(this.get(1), true));
-        this.headView.move(this.get(0));
+        this.bodyViews.splice(1, 0, new SnakeBodyView(this.get(1), true));
+        this.bodyViews[0].move(this.get(0));
     }
 
     drink(color) {
@@ -65,16 +64,16 @@ class Snake {
         const isDrinkColor = game.state.snake.colors.length > 0 && c === color;
         const emptyCell = game.state.snake.positions.pop();
 
-        const lastBodyPos = game.state.snake.positions[game.state.snake.positions.length - 1];
-        const removedPos = game.state.snake.positions[game.state.snake.positions.length - 2];
+        const lastBodyPos = this.get(-1);
+        const removedPos = this.get(-2);
 
         const bodyView = this.bodyViews.find(view => removedPos.x == view.x && removedPos.y == view.y);
         this.bodyViews = this.bodyViews.filter(view => view !== bodyView);
         game.screen.remove(bodyView);
 
         const lastBodyView = this.bodyViews.find(view => lastBodyPos.x == view.x && lastBodyPos.y == view.y);
-        lastBodyView.move(this.get(game.state.snake.positions.length - 2))
-        this.tailView.move(this.get(game.state.snake.positions.length - 1));
+        lastBodyView.move(removedPos);
+        this.bodyViews[this.bodyViews.length - 1].move(lastBodyPos);
 
         return {
             isDrinkColor,
@@ -90,6 +89,10 @@ class Snake {
 
     get(i) {
         const {colors, positions} = game.state.snake;
+        if (i < 0) {
+            i = positions.length + i;
+        }
+
         const prev = positions[i - 1];
         const next = positions[+i + 1];
         const part = {
