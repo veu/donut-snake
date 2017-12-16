@@ -94,10 +94,10 @@ class Screen {
 
         this.ctx.restore();
 
-        this.ctx.clearRect(0, 0, 120, 10);
-        this.ctx.clearRect(0, 0, 10, 120);
-        this.ctx.clearRect(0, 110, 120, 10);
-        this.ctx.clearRect(110, 0, 10, 120);
+        this.ctx.clearRect(-10, -10, 140, 20);
+        this.ctx.clearRect(-10, -10, 20, 130);
+        this.ctx.clearRect(-10, 110, 140, 10);
+        this.ctx.clearRect(110, -10, 20, 130);
     }
 
     drawStats(moves, score, highScore) {
