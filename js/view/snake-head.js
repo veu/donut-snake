@@ -24,13 +24,13 @@ class SnakeHeadView {
             part.next.y - part.y
         );
 
-        game.screen.addTween(this, 'angle', {
-            duration: 10,
-            ease: 'inout',
-            to: this.angle + this.getDifference(this.angle, this.to.toAngle()),
-        });
-
-        if (!this.turn) {
+        if (this.turn) {
+            game.screen.addTween(this, 'angle', {
+                duration: 10,
+                ease: 'inout',
+                to: this.angle + this.getDifference(this.angle, this.to.toAngle()),
+            });
+        } else {
             game.screen.addTween(this, 'x', {
                 duration: 10,
                 ease: 'inout',
@@ -67,10 +67,12 @@ class SnakeHeadView {
     drawAt(ctx, x, y) {
         ctx.save();
 
-        ctx.translate(x * 20 + 10 + this.to.x * 10, y * 20 + 10 + this.to.y * 10);
-
         const ref = this.turn ? this.turn > 0 ? this.to.ccw() : this.to.cw() : {x: 0, y: 0};
-        ctx.translate(ref.x * 10, ref.y * 10);
+        ctx.translate(
+            x * 20 + 10 + this.to.x * 10 + ref.x * 10,
+            y * 20 + 10 + this.to.y * 10 + ref.y * 10
+        );
+
         ctx.rotate((this.angle) * Math.PI / 2);
         if (this.turn) ctx.translate(0, -this.turn * 10);
 
