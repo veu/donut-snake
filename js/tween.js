@@ -3,10 +3,10 @@ class Tween {
         this.target = target;
         this.property = property;
 
-        this.from = options.from || this.target[this.property];
-        this.to = options.to || 0;
-        this.duration = options.duration || 30;
-        this.remove = options.remove || false;
+        this.from = options.from !== undefined ? options.from : this.target[this.property];
+        this.to = options.to !== undefined ? options.to : 0;
+        this.duration = options.duration !== undefined ? options.duration : 30;
+        this.remove = options.remove !== undefined ? options.remove : false;
 
         this.step = 1;
 
