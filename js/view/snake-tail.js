@@ -82,7 +82,7 @@ class SnakeTailView {
         ctx.scale(2, 1);
 
         ctx.beginPath();
-        ctx.arc(0, 0, 6, Math.PI * .5, Math.PI * 1.5, 1);
+        ctx.arc(0, 0, 7, Math.PI * .5, Math.PI * 1.5, 1);
 
         const gradient = ctx.createRadialGradient(
             0, 0, 1,
