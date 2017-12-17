@@ -79,17 +79,16 @@ class SnakeTailView {
         ctx.rotate((this.angle) * Math.PI / 2);
         if (this.turn) ctx.translate(0, this.turn * 10);
 
-        ctx.scale(2, 1);
-
         ctx.beginPath();
-        ctx.arc(0, 0, 7, Math.PI * .5, Math.PI * 1.5, 1);
+        ctx.moveTo(0, -7);
+        ctx.quadraticCurveTo(9, -7, 16, 0);
+        ctx.quadraticCurveTo(9, 7, 0, 7);
 
-        const gradient = ctx.createRadialGradient(
-            0, 0, 1,
-            0, 0, 9
-        );
-        gradient.addColorStop(0, '#fc8');
+        const gradient = ctx.createLinearGradient(0, -11, 0, 11);
+        gradient.addColorStop(0, '#eb6');
+        gradient.addColorStop(.5, '#fc8');
         gradient.addColorStop(1, '#eb6');
+
         ctx.fillStyle = gradient;
         ctx.fill();
 
