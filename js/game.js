@@ -8,14 +8,13 @@ class Game {
     init() {
         this.grid = new Grid();
         this.snake = new Snake();
+        this.stats = new Stats();
     }
 
     start() {
-        this.state.moves = 8;
-        this.state.score = 0;
-
         this.grid.init();
         this.snake.init();
+        this.stats.init();
 
         this.save();
     }

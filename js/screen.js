@@ -90,7 +90,6 @@ class Screen {
         this.ctx.translate(10,10);
 
         this.objects.forEach(object => object.draw(this.ctx));
-        this.drawStats(this.game.state.moves, this.game.state.score, this.game.state.highScore);
 
         this.ctx.restore();
 
@@ -98,26 +97,5 @@ class Screen {
         this.ctx.clearRect(-10, -10, 20, 130);
         this.ctx.clearRect(-10, 110, 140, 10);
         this.ctx.clearRect(110, -10, 20, 130);
-    }
-
-    drawStats(moves, score, highScore) {
-        this.ctx.fillStyle = '#f6b';
-        this.ctx.fillRect(-20, 110, 140, 200);
-        this.ctx.fillStyle = '#200';
-        let offset = 125;
-
-        for (const [key, value] of [['Moves', moves], ['Score', score], ['High Score', highScore]]) {
-            let leftWidth = this.ctx.measureText(key).width;
-            let rightWidth = this.ctx.measureText(value).width;
-            for (let i = 0; i < 96 - leftWidth - rightWidth; i += 2) {
-                this.ctx.fillRect(3 + leftWidth + i, offset, 1, 1);
-            }
-            this.ctx.textAlign = 'left';
-            this.ctx.fillText(key, 2, offset + 1);
-            this.ctx.textAlign = 'right';
-            this.ctx.fillText(value, 100, offset + 1);
-
-            offset += 11;
-        }
     }
 }
