@@ -84,6 +84,10 @@ class Snake {
         };
     }
 
+    closeEyes() {
+        this.bodyViews[0].closeEyes();
+    }
+
     *iterate() {
         for (let i in game.state.snake.positions) {
             yield this.get(i);

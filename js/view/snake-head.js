@@ -9,6 +9,7 @@ class SnakeHeadView {
             part.next.y - part.y
         );
         this.angle = this.to.toAngle();
+        this.eyelids = 0;
 
         game.screen.add(this);
     }
@@ -44,6 +45,14 @@ class SnakeHeadView {
                 to: this.y,
             });
         }
+    }
+
+    closeEyes() {
+        game.screen.addTween(this, 'eyelids', {
+            duration: 30,
+            ease: 'inout',
+            to: 1,
+        });
     }
 
     getDifference(a, b) {
@@ -92,13 +101,12 @@ class SnakeHeadView {
         ctx.fill();
 
         ctx.beginPath();
-        ctx.ellipse(0, 4, 1.8, .8, -.3, 6, 3.8, 0);
-        ctx.fillStyle = '#000';
+        ctx.ellipse(0, 4, 1.8 + this.eyelids * .2, .8, -.3, Math.PI * -.2 + this.eyelids * 1.2, Math.PI * -.8 - this.eyelids * 1.2, 0);
+        ctx.fillStyle = `hsl(37, 80%, ${this.eyelids * 30}%)`;
         ctx.fill();
 
         ctx.beginPath();
-        ctx.ellipse(0, -4, 1.8, .8, .3, 6.8, 2.5, 1);
-        ctx.fillStyle = '#000';
+        ctx.ellipse(0, -4, 1.8 + this.eyelids * .2, .8, .3, Math.PI * .2 - this.eyelids * 1.2, Math.PI * .8 + this.eyelids * 1.2, 1);
         ctx.fill();
 
         ctx.restore();

@@ -80,6 +80,10 @@ class Game {
             }
         }
 
+        if (this.state.moves == 0) {
+            this.snake.closeEyes();
+        }
+
         this.save();
 
         this.locked = false;
