@@ -81,7 +81,8 @@ class SnakeTailView {
 
         ctx.beginPath();
         ctx.moveTo(0, -7);
-        ctx.quadraticCurveTo(9, -7, 16, 0);
+        ctx.quadraticCurveTo(9, -7, 15, -1);
+        ctx.quadraticCurveTo(16, 0, 15, 1);
         ctx.quadraticCurveTo(9, 7, 0, 7);
 
         const gradient = ctx.createLinearGradient(0, -11, 0, 11);
