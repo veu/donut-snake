@@ -20,7 +20,7 @@ class StatsView {
             let leftWidth = ctx.measureText(key).width;
             let rightWidth = ctx.measureText(value).width;
             for (let i = 0; i < 96 - leftWidth - rightWidth; i += 2) {
-                const elementOffset = key == 'Moves' && isInDanger ? offset + Math.sin(i + this.animationStep) / 3 : offset;
+                const elementOffset = key == 'Moves' && isInDanger ? offset + Math.sin(i - this.animationStep) / 3 : offset;
                 ctx.fillRect(3 + leftWidth + i, elementOffset, 1, 1);
             }
             ctx.textAlign = 'left';
