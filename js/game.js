@@ -64,22 +64,21 @@ class Game {
 
         this.snake.move(cell);
 
-        await this.wait(10);
+        await this.screen.wait(10);
 
         this.grid.empty(cell);
 
         if (!cell.isDonut) {
-            let result;
             let colors = 0;
             let delta = 0;
-            while (result = this.snake.drink(cell.color)) {
+            for (const result of this.snake.drink(cell.color)) {
                 this.grid.roll(result.emptyCell);
                 if (result.isDrinkColor) {
                     this.state.score += delta += ++ colors;
                     this.state.highScore = Math.max(this.state.score, this.state.highScore);
                     this.state.moves += 2;
                 }
-                await this.wait(10);
+                await this.screen.wait(10);
             }
         }
 
@@ -90,11 +89,5 @@ class Game {
         this.save();
 
         this.locked = false;
-    }
-
-    wait(ticks) {
-        return new Promise((resolve) => {
-            setTimeout(resolve, 1000 / 30 * ticks);
-        });
     }
 }

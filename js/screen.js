@@ -7,6 +7,7 @@ class Screen {
 
         this.objects = [];
         this.tweens = [];
+        this.waiting = [];
 
         setInterval(() => this.tick(), 1000 / 30);
     }
@@ -75,7 +76,25 @@ class Screen {
             return false;
         });
 
+        this.waiting = this.waiting.filter(waiting => {
+            -- waiting.ticks;
+
+            if (waiting.ticks == 0) {
+                waiting.resolve();
+
+                return false;
+            }
+
+            return true;
+        });
+
         this.draw();
+    }
+
+    wait(ticks) {
+        return new Promise((resolve) => {
+            this.waiting.push({ticks, resolve});
+        });
     }
 
     draw() {

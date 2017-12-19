@@ -64,34 +64,39 @@ class Snake {
         this.bodyViews[0].move(this.get(0));
     }
 
-    drink(color) {
-        const c = game.state.snake.colors.pop();
+    *drink(color) {
+        let first = true;
+        while (true) {
+            const c = game.state.snake.colors.pop();
 
-        if (c === undefined) {
-            return;
+            if (c === undefined) {
+                return;
+            }
+
+            const tailPos = this.get(-2);
+
+            const isDrinkColor = game.state.snake.colors.length > 0 && c === color;
+            const emptyCell = game.state.snake.positions.pop();
+
+            const lastBodyPos = this.get(-1);
+            const removedPos = this.get(-2);
+
+            const bodyView = this.bodyViews.find(view => removedPos.x == view.x && removedPos.y == view.y);
+            this.bodyViews = this.bodyViews.filter(view => view !== bodyView);
+            bodyView.hide(first);
+
+            const lastBodyView = this.bodyViews.find(view => lastBodyPos.x == view.x && lastBodyPos.y == view.y);
+            lastBodyView.hide(first);
+            this.bodyViews.splice(-2, 1, new SnakeBodyView(this.get(-2), true, first));
+            this.bodyViews[this.bodyViews.length - 1].move(tailPos, first);
+
+            yield {
+                isDrinkColor,
+                emptyCell,
+            };
+
+            first = false;
         }
-
-        const tailPos = this.get(-2);
-
-        const isDrinkColor = game.state.snake.colors.length > 0 && c === color;
-        const emptyCell = game.state.snake.positions.pop();
-
-        const lastBodyPos = this.get(-1);
-        const removedPos = this.get(-2);
-
-        const bodyView = this.bodyViews.find(view => removedPos.x == view.x && removedPos.y == view.y);
-        this.bodyViews = this.bodyViews.filter(view => view !== bodyView);
-        bodyView.hide();
-
-        const lastBodyView = this.bodyViews.find(view => lastBodyPos.x == view.x && lastBodyPos.y == view.y);
-        lastBodyView.hide();
-        this.bodyViews.splice(-2, 1, new SnakeBodyView(this.get(-2), true));
-        this.bodyViews[this.bodyViews.length - 1].move(tailPos);
-
-        return {
-            isDrinkColor,
-            emptyCell,
-        };
     }
 
     closeEyes() {

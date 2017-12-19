@@ -19,7 +19,7 @@ class SnakeTailView {
         return distance > 2 ? (2 - distance) * Math.sign(diff) : diff;
     }
 
-    move(part) {
+    move(part, first) {
         this.turn = part.turn;
         this.from = new Direction(
             part.prev.x - part.x,
@@ -34,19 +34,19 @@ class SnakeTailView {
             this.y = part.y;
             game.screen.addTween(this, 'angle', {
                 duration: 10,
-                ease: 'inout',
+                ease: first ? 'in' : 'linear',
                 to: this.angle + this.getDifference(this.angle, this.from.toAngle()),
             });
         } else {
             game.screen.addTween(this, 'x', {
                 duration: 10,
-                ease: 'inout',
+                ease: first ? 'in' : 'linear',
                 from: part.x - this.from.x,
                 to: part.x,
             });
             game.screen.addTween(this, 'y', {
                 duration: 10,
-                ease: 'inout',
+                ease: first ? 'in' : 'linear',
                 from: part.y - this.from.y,
                 to: part.y,
             });

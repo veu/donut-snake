@@ -1,5 +1,5 @@
 class SnakeBodyView {
-    constructor(part, animate=false) {
+    constructor(part, animate=false, first=true) {
         this.x = part.x;
         this.y = part.y;
         this.z = 5;
@@ -19,16 +19,25 @@ class SnakeBodyView {
         this.visible = animate ? 0 : 1;
         this.hiding = false;
         if (animate) {
-            game.screen.addTween(this, 'visible', {to: 1, ease: 'inout', duration: 10});
+            game.screen.addTween(this, 'visible', {
+                to: 1,
+                ease: first ? 'inout' : 'linear',
+                duration: 10
+            });
         }
 
         game.screen.add(this);
     }
 
-    hide() {
+    hide(first) {
         this.visible = 1;
         this.hiding = true;
-        game.screen.addTween(this, 'visible', {to: 0, ease: 'inout', duration: 10, remove: true});
+        game.screen.addTween(this, 'visible', {
+            to: 0,
+            ease: first ? 'in' : 'linear',
+            duration: 10,
+            remove: true
+        });
 
     }
 

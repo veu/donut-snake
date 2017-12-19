@@ -8,12 +8,13 @@ class Tween {
         this.duration = options.duration !== undefined ? options.duration : 30;
         this.remove = options.remove !== undefined ? options.remove : false;
 
-        this.step = 1;
+        this.step = 0;
 
         this.ease = {
             in: t => t * t,
             out: t => (2 - t) * t,
             inout: t => t < .5 ? t * t * 2 : (2 - t) * t * 2 - 1,
+            linear: t => t,
         }[options.ease || 'in'];
     }
 
