@@ -24,9 +24,6 @@ class Tween {
         } else {
             this.target[this.property] = this.to;
         }
-
-
-        this.step ++;
     }
 
     end() {
