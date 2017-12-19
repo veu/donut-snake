@@ -11,6 +11,8 @@ class SnakeHeadView {
         this.angle = this.to.toAngle();
         this.eyelids = 0;
 
+        this.createGradient();
+
         game.screen.add(this);
     }
 
@@ -91,13 +93,7 @@ class SnakeHeadView {
         ctx.beginPath();
         ctx.arc(-3, 0, 8, Math.PI * .5 + .5, Math.PI * 1.5 - .5, 1);
 
-        const gradient = ctx.createRadialGradient(
-            0, 0, 1,
-            0, 0, 9
-        );
-        gradient.addColorStop(0, '#fc8');
-        gradient.addColorStop(1, '#eb6');
-        ctx.fillStyle = gradient;
+        ctx.fillStyle = this.gradient;
         ctx.fill();
 
         ctx.beginPath();
@@ -110,5 +106,14 @@ class SnakeHeadView {
         ctx.fill();
 
         ctx.restore();
+    }
+
+    createGradient() {
+        this.gradient = game.screen.ctx.createRadialGradient(
+            0, 0, 1,
+            0, 0, 9
+        );
+        this.gradient.addColorStop(0, '#fc8');
+        this.gradient.addColorStop(1, '#eb6');
     }
 }
