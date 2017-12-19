@@ -13,12 +13,6 @@ class Grid {
 
         for(let y = 5; y--;) {
             for(let x = 5; x--;) {
-                if (x == 2 && (y >= 2 && y <= 4)) {
-                    game.state.grid[x + y * 5] = null;
-
-                    continue;
-                }
-
                 this.roll({x, y});
             }
         }

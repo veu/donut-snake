@@ -6,12 +6,22 @@ class Snake {
     init() {
         game.state.snake = {
             colors: [],
-            positions: [
-                {x: 2, y: 2},
-                {x: 2, y: 3},
-                {x: 2, y: 4},
-            ],
+            positions: [],
         };
+
+        const x1 = Math.random() * 5 | 0;
+        const y1 = Math.random() * 5 | 0;
+
+        const x2 = (x1 + Math.random() * 3 + 4 | 0) % 5;
+        const y2 = x1 != x2 ? y1 : (y1 + (Math.random() * 2 | 0) * 2 + 4) % 5;
+
+        let x3, y3;
+        do {
+            x3 = (x2 + Math.random() * 3 + 4 | 0) % 5;
+            y3 = x2 != x3 ? y2 : (y2 + (Math.random() * 2 | 0) * 2 + 4) % 5;
+        } while (x1 == x3 && y1 == y3);
+
+        game.state.snake.positions.push({x: x1, y: y1}, {x: x2, y: y2}, {x: x3, y: y3});
 
         if (this.bodyViews.length > 0) {
             for (const view of this.bodyViews) {

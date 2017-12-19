@@ -12,9 +12,13 @@ class Game {
     }
 
     start() {
-        this.grid.init();
         this.snake.init();
+        this.grid.init();
         this.stats.init();
+
+        for (const part of this.snake.iterate()) {
+            this.grid.empty(part);
+        }
 
         this.save();
     }
