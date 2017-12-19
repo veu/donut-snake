@@ -10,6 +10,8 @@ class SnakeTailView {
         );
         this.angle = this.from.toAngle();
 
+        this.createGradient();
+
         game.screen.add(this);
     }
 
@@ -85,14 +87,16 @@ class SnakeTailView {
         ctx.quadraticCurveTo(16, 0, 15, 1);
         ctx.quadraticCurveTo(9, 7, 0, 7);
 
-        const gradient = ctx.createLinearGradient(0, -11, 0, 11);
-        gradient.addColorStop(0, '#eb6');
-        gradient.addColorStop(.5, '#fc8');
-        gradient.addColorStop(1, '#eb6');
-
-        ctx.fillStyle = gradient;
+        ctx.fillStyle = this.gradient;
         ctx.fill();
 
         ctx.restore();
+    }
+
+    createGradient() {
+        this.gradient = game.screen.ctx.createLinearGradient(0, -11, 0, 11);
+        this.gradient.addColorStop(0, '#eb6');
+        this.gradient.addColorStop(.5, '#fc8');
+        this.gradient.addColorStop(1, '#eb6');
     }
 }
