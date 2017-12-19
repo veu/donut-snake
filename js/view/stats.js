@@ -1,5 +1,6 @@
 class StatsView {
     constructor() {
+        this.z = 10;
         game.screen.add(this);
     }
 
