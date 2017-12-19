@@ -68,7 +68,6 @@ class SnakeBodyView {
 
         for (let i = 2; i--;) {
             const isLast = this.color === undefined;
-            const width = i + 6;
 
             let gradient;
             if (isStraight) {
@@ -92,46 +91,17 @@ class SnakeBodyView {
             gradient.addColorStop(.5, i ? '#fc8' : ['#faa','#afa','#aaf','#ff8'][this.color]);
             gradient.addColorStop(1, i ? '#eb6' : ['#f22','#0c0','#22f','#aa0'][this.color]);
 
-            ctx.fillStyle = gradient;
+            ctx.strokeStyle = gradient;
+            ctx.lineWidth = i * 2 + 12;
 
             ctx.beginPath();
-            ctx.moveTo(
-                this.from.x * 10 + this.from.ccw().x * width,
-                this.from.y * 10 + this.from.ccw().y * width
-            );
+            ctx.moveTo(this.from.x * 10, this.from.y * 10);
             if (isStraight) {
-                ctx.lineTo(
-                    this.to.x * 10 + this.to.cw().x * width,
-                    this.to.y * 10 + this.to.cw().y * width
-                );
+                ctx.lineTo(this.to.x * 10, this.to.y * 10);
             } else {
-                ctx.arcTo(
-                    (this.from.ccw().x || this.to.cw().x) * width,
-                    (this.from.ccw().y || this.to.cw().y) * width,
-                    this.to.x * 10 + this.to.cw().x * width,
-                    this.to.y * 10 + this.to.cw().y * width,
-                    this.turn < 0 ? 4 - i : 16 + i
-                );
+                ctx.arcTo(0, 0, this.to.x * 10, this.to.y * 10, 10);
             }
-            ctx.lineTo(
-                this.to.x * 10 + this.to.ccw().x * width,
-                this.to.y * 10 + this.to.ccw().y * width
-            );
-            if (isStraight) {
-                ctx.lineTo(
-                    this.from.x * 10 + this.from.cw().x * width,
-                    this.from.y * 10 + this.from.cw().y * width
-                );
-            } else {
-                ctx.arcTo(
-                    (this.from.cw().x || this.to.ccw().x) * width,
-                    (this.from.cw().y || this.to.ccw().y) * width,
-                    this.from.x * 10 + this.from.cw().x * width,
-                    this.from.y * 10 + this.from.cw().y * width,
-                    this.turn < 0 ? 16 + i : 4 - i
-                );
-            }
-            ctx.fill();
+            ctx.stroke();
 
             if (this.color === undefined) break;
         }
