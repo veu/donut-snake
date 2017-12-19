@@ -18,6 +18,7 @@ class SnakeBodyView {
 
         this.visible = animate ? 0 : 1;
         this.hiding = false;
+        this.isStraight = this.from.isOpposite(this.to);
         if (animate) {
             game.screen.addTween(this, 'visible', {
                 to: 1,
@@ -25,6 +26,8 @@ class SnakeBodyView {
                 duration: 10
             });
         }
+
+        this.createGradients();
 
         game.screen.add(this);
     }
@@ -45,11 +48,9 @@ class SnakeBodyView {
         ctx.save();
         ctx.translate(this.x * 20 + 10, this.y * 20 + 10);
 
-        const isStraight = this.from.isOpposite(this.to);
-
         if (this.visible < 1) {
             ctx.beginPath();
-            if(isStraight) {
+            if(this.isStraight) {
                 ctx.rotate(this.to.toAngle() * Math.PI / 2);
                 ctx.rect(-10 + (this.hiding ? 1 - this.visible : 0) * 20, -10, this.visible * 20, 20);
                 ctx.rotate(-this.to.toAngle() * Math.PI / 2);
@@ -67,36 +68,12 @@ class SnakeBodyView {
         }
 
         for (let i = 2; i--;) {
-            const isLast = this.color === undefined;
-
-            let gradient;
-            if (isStraight) {
-                gradient = ctx.createLinearGradient(
-                    this.from.cw().x * 11,
-                    this.from.cw().y * 11,
-                    this.to.cw().x * 11,
-                    this.to.cw().y * 11,
-                );
-            } else {
-                gradient = ctx.createRadialGradient(
-                    (this.from.x || this.to.x) * 10,
-                    (this.from.y || this.to.y) * 10,
-                    0,
-                    (this.from.x || this.to.x) * 10,
-                    (this.from.y || this.to.y) * 10,
-                    20
-                );
-            }
-            gradient.addColorStop(0, i ? '#eb6' : ['#f22','#0c0','#22f','#aa0'][this.color]);
-            gradient.addColorStop(.5, i ? '#fc8' : ['#faa','#afa','#aaf','#ff8'][this.color]);
-            gradient.addColorStop(1, i ? '#eb6' : ['#f22','#0c0','#22f','#aa0'][this.color]);
-
-            ctx.strokeStyle = gradient;
+            ctx.strokeStyle = this.gradients[i];
             ctx.lineWidth = i * 2 + 12;
 
             ctx.beginPath();
             ctx.moveTo(this.from.x * 10, this.from.y * 10);
-            if (isStraight) {
+            if (this.isStraight) {
                 ctx.lineTo(this.to.x * 10, this.to.y * 10);
             } else {
                 ctx.arcTo(0, 0, this.to.x * 10, this.to.y * 10, 10);
@@ -107,5 +84,34 @@ class SnakeBodyView {
         }
 
         ctx.restore();
+    }
+
+    createGradients() {
+        this.gradients = [];
+
+        for (let i = 2; i--;) {
+            if (this.isStraight) {
+                this.gradients[i] = game.screen.ctx.createLinearGradient(
+                    this.from.cw().x * 11,
+                    this.from.cw().y * 11,
+                    this.to.cw().x * 11,
+                    this.to.cw().y * 11,
+                );
+            } else {
+                this.gradients[i] = game.screen.ctx.createRadialGradient(
+                    (this.from.x || this.to.x) * 10,
+                    (this.from.y || this.to.y) * 10,
+                    0,
+                    (this.from.x || this.to.x) * 10,
+                    (this.from.y || this.to.y) * 10,
+                    20
+                );
+            }
+            this.gradients[i].addColorStop(0, i ? '#eb6' : ['#f22','#0c0','#22f','#aa0'][this.color]);
+            this.gradients[i].addColorStop(.5, i ? '#fc8' : ['#faa','#afa','#aaf','#ff8'][this.color]);
+            this.gradients[i].addColorStop(1, i ? '#eb6' : ['#f22','#0c0','#22f','#aa0'][this.color]);
+
+            if (this.color === undefined) break;
+        }
     }
 }
