@@ -41,9 +41,14 @@ class Input {
     }
 
     onRestart(callback) {
-
         for (const element of [...document.querySelectorAll('.btn-restart')]) {
             element.addEventListener('click', () => { callback() });
         }
+
+        document.addEventListener('keydown', e => {
+            if (e.keyCode == 82) {
+                callback();
+            }
+        });
     }
 }
