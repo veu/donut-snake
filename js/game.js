@@ -12,7 +12,7 @@ class Game {
     }
 
     start() {
-        this.snake.init();
+        this.snake.init(this.state.plays > 4);
         this.grid.init();
         this.stats.init();
 
@@ -43,6 +43,7 @@ class Game {
 
         for (const key in this.state) delete this.state[key];
         this.state.highScore = savedState && savedState.highScore || 0;
+        this.state.plays = savedState && savedState.plays || 0;
 
         this.start();
     }
@@ -86,6 +87,7 @@ class Game {
 
         if (this.state.moves == 0) {
             this.snake.closeEyes();
+            ++ this.state.plays;
         }
 
         this.save();
