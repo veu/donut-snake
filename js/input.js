@@ -46,7 +46,7 @@ class Input {
         }
 
         document.addEventListener('keydown', e => {
-            if (e.keyCode == 82) {
+            if (e.keyCode == 82 && !['Control', 'Meta'].some(key => event.getModifierState(key))) {
                 callback();
             }
         });
