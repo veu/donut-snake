@@ -1,15 +1,8 @@
 class Grid {
-    constructor() {
-        this.views = [];
-    }
-
     init() {
-        for (const view of this.views) {
-            game.screen.remove(view);
-        }
+        this.views = [];
 
         game.state.grid = [];
-        this.views = [];
 
         for(let y = 5; y--;) {
             for(let x = 5; x--;) {
@@ -19,6 +12,8 @@ class Grid {
     }
 
     load() {
+        this.views = [];
+
         for(let y = 5; y--;) {
             for(let x = 5; x--;) {
                 const cell = this.get({x, y});
@@ -33,7 +28,7 @@ class Grid {
     get({x, y}) {
         const value = game.state.grid[x + y * 5];
 
-        if (value === null) {
+        if (value === null || value === undefined) {
             return;
         }
 
@@ -45,6 +40,15 @@ class Grid {
         };
     }
 
+    set({x, y}, color) {
+        game.state.grid[x + y * 5] = color;
+
+        if (color !== undefined) {
+            const cell = this.get({x, y});
+            this.addView(cell);
+        }
+    }
+
     roll({x, y}) {
         game.state.grid[x + y * 5] = this.getRandomColor(x, y);
 
@@ -53,7 +57,9 @@ class Grid {
     }
 
     empty({x, y}) {
-        this.removeView({x, y});
+        const view = this.views[x + y * 5];
+        game.screen.remove(view);
+
         game.state.grid[x + y * 5] = null;
     }
 
@@ -97,12 +103,6 @@ class Grid {
 
         this.views[cell.x + cell.y * 5] = view;
         game.screen.add(view);
-    }
-
-    removeView(cell) {
-        const view = this.views[cell.x + cell.y * 5];
-
-        game.screen.remove(view);
     }
 
     isOccupied({x, y}) {

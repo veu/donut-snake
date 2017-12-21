@@ -1,8 +1,4 @@
 class Snake {
-    constructor() {
-        this.bodyViews = [];
-    }
-
     init(allowWrap) {
         game.state.snake = {
             colors: [],
@@ -23,12 +19,6 @@ class Snake {
 
         game.state.snake.positions.push({x: x1, y: y1}, {x: x2, y: y2}, {x: x3, y: y3});
 
-        if (this.bodyViews.length > 0) {
-            for (const view of this.bodyViews) {
-                game.screen.remove(view);
-            }
-        }
-
         this.bodyViews = [
             new SnakeHeadView(this.get(0)),
             new SnakeBodyView(this.get(1)),
@@ -37,7 +27,7 @@ class Snake {
     }
 
     load() {
-        this.bodyViews.push(new SnakeHeadView(this.get(0)));
+        this.bodyViews = [new SnakeHeadView(this.get(0))];
         for (const i in game.state.snake.colors) {
             this.bodyViews.push(new SnakeBodyView(this.get(+i + 1)));
         }

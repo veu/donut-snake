@@ -4,10 +4,10 @@ class Input {
 
         document.addEventListener('keydown', e => {
             if (37 <= e.keyCode && e.keyCode <= 40) {
-                const dir = {
-                    x: (e.keyCode - 38) % 2,
-                    y: (e.keyCode - 39) % 2,
-                };
+                const dir = new Direction(
+                    (e.keyCode - 38) % 2,
+                    (e.keyCode - 39) % 2
+                );
                 callback(dir);
             }
         });
@@ -23,10 +23,10 @@ class Input {
 
             if (x|y) {
                 const isX = x * x > y * y;
-                const dir = {
-                    x: isX ? Math.sign(x) : 0,
-                    y: isX ? 0 : Math.sign(y),
-                };
+                const dir = new Direction(
+                    isX ? Math.sign(x) : 0,
+                    isX ? 0 : Math.sign(y)
+                );
                 callback(dir);
             }
         });
@@ -47,6 +47,24 @@ class Input {
 
         document.addEventListener('keydown', e => {
             if (e.keyCode == 82 && !['Control', 'Meta'].some(key => event.getModifierState(key))) {
+                callback();
+            }
+        });
+    }
+
+    onHelp(callback) {
+        document.querySelector('.btn-help').addEventListener('click', e => { callback(); });
+        document.addEventListener('keydown', e => {
+            if (e.keyCode == 72 && !['Control', 'Meta'].some(key => event.getModifierState(key))) {
+                callback();
+            }
+        });
+    }
+
+    onResume(callback) {
+        document.querySelector('.btn-resume').addEventListener('click', e => { callback(); });
+        document.addEventListener('keydown', e => {
+            if (e.keyCode == 27 && !['Control', 'Meta'].some(key => event.getModifierState(key))) {
                 callback();
             }
         });

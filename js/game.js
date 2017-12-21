@@ -12,6 +12,13 @@ class Game {
     }
 
     start() {
+        this.screen.reset();
+
+        if (this.tutorial) {
+            this.screen.toggleHelpButton();
+            this.tutorial = undefined;
+        }
+
         this.snake.init(this.state.plays > 4);
         this.grid.init();
         this.stats.init();
@@ -23,11 +30,30 @@ class Game {
         this.save();
     }
 
+    async startTutorial() {
+        if (this.tutorial) return;
+
+        this.locked = true;
+
+        this.tutorial = new Tutorial();
+        this.screen.toggleHelpButton();
+        await this.tutorial.init();
+
+        this.locked = false;
+    }
+
     save() {
         window.localStorage.setItem('save', JSON.stringify(this.state));
     };
 
     load() {
+        this.screen.reset();
+
+        if (this.tutorial) {
+            this.screen.toggleHelpButton();
+            this.tutorial = undefined;
+        }
+
         let savedState;
         try {
             savedState = JSON.parse(window.localStorage.getItem('save'));
@@ -37,6 +63,7 @@ class Game {
             if (this.state.moves > 0) {
                 this.grid.load();
                 this.snake.load();
+                this.stats.load();
                 return;
             }
         } catch (e) { console.error(e); }
@@ -51,6 +78,12 @@ class Game {
     async move(dir) {
         if (this.locked) return;
         this.locked = true;
+
+        if (this.tutorial) {
+            await this.tutorial.move(dir);
+            this.locked = false;
+            return;
+        }
 
         const next = this.snake.getNextPosition(dir);
 

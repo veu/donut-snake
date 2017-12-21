@@ -16,6 +16,8 @@ class Tween {
             inout: t => t < .5 ? t * t * 2 : (2 - t) * t * 2 - 1,
             linear: t => t,
         }[options.ease || 'in'];
+
+        this.queued = [];
     }
 
     update() {
@@ -24,6 +26,7 @@ class Tween {
             this.target[this.property] = this.from + distance * this.ease(this.step / this.duration);
         } else {
             this.target[this.property] = this.to;
+            this.queued.forEach(callback => callback());
         }
     }
 
@@ -33,6 +36,10 @@ class Tween {
 
     isAlive() {
         return this.step < this.duration;
+    }
+
+    then(callback) {
+        this.queued.push(callback);
     }
 }
 

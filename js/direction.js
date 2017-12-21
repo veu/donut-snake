@@ -24,6 +24,10 @@ class Direction {
         return this.y == dir.x && -this.x == dir.y;
     }
 
+    equals(dir) {
+        return this.x == dir.x && this.y == dir.y;
+    }
+
     toAngle() {
         return (this.x ? this.x + 1 : this.y + 2);
     }

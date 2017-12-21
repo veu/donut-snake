@@ -37,7 +37,10 @@ class Screen {
     }
 
     addTween(target, property, options) {
-        this.tweens.push(new Tween(target, property, options));
+        const tween = new Tween(target, property, options);
+        this.tweens.push(tween);
+
+        return tween;
     }
 
     removeTweens(target) {
@@ -53,10 +56,17 @@ class Screen {
     }
 
     reset() {
-        for (const tween in this.tweens) {
+        for (const tween of this.tweens) {
             tween.end();
         }
         this.tweens = [];
+
+        for (const waiting of this.waiting) {
+            waiting.resolve();
+        }
+        this.waiting = [];
+
+        this.objects = [];
     }
 
     tick() {
@@ -108,13 +118,20 @@ class Screen {
 
         this.ctx.translate(10,10);
 
-        this.objects.forEach(object => object.draw(this.ctx));
+        this.objects.forEach(object => object.z < 10 && object.draw(this.ctx));
+
+        this.ctx.clearRect(-20, -20, 140, 20);
+        this.ctx.clearRect(-20, -20, 20, 130);
+        this.ctx.clearRect(-20, 100, 140, 10);
+        this.ctx.clearRect(100, -20, 20, 130);
+
+        this.objects.forEach(object => object.z >= 10 && object.draw(this.ctx));
 
         this.ctx.restore();
+    }
 
-        this.ctx.clearRect(-10, -10, 140, 20);
-        this.ctx.clearRect(-10, -10, 20, 130);
-        this.ctx.clearRect(-10, 110, 140, 10);
-        this.ctx.clearRect(110, -10, 20, 130);
+    toggleHelpButton() {
+        document.querySelector('.btn-help').classList.toggle('hidden');
+        document.querySelector('.btn-resume').classList.toggle('hidden');
     }
 }
