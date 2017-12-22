@@ -16,10 +16,10 @@ class DonutView {
 
         for (let i = 2; i--;) {
             ctx.beginPath();
-            ctx.arc(0, 0, 6 + i, 0, 7, 0);
-            ctx.arc(0, 0, 2 - i * .5, 7, 0, 1);
-            ctx.fillStyle = this.gradients[i];
-            ctx.fill();
+            ctx.arc(0, 0, 4.25, 0, 7, 0);
+            ctx.lineWidth = 4 + i * 1.5;
+            ctx.strokeStyle = this.gradients[i];
+            ctx.stroke()
         }
 
         ctx.restore();
