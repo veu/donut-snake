@@ -21,7 +21,7 @@ class Input {
             const x = e.pageX - down.pageX;
             const y = e.pageY - down.pageY;
 
-            if (x|y) {
+            if (Math.hypot(x, y) > 50) {
                 const isX = x * x > y * y;
                 const dir = new Direction(
                     isX ? Math.sign(x) : 0,
