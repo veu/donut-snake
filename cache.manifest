@@ -1,0 +1,23 @@
+CACHE MANIFEST
+#version 2
+CACHE:
+index.html
+js/direction.js
+js/game.js
+js/grid.js
+js/input.js
+js/screen.js
+js/snake.js
+js/stats.js
+js/tutorial.js
+js/tween.js
+js/view/donut.js
+js/view/drink.js
+js/view/snake-body.js
+js/view/snake-head.js
+js/view/snake-tail.js
+js/view/stats.js
+js/view/tutorial.js
+
+NETWORK:
+*
