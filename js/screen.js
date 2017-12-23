@@ -24,11 +24,14 @@ class Screen {
         this.ctx.scale(this.scale, this.scale);
 
         this.ctx.font = '8px sans-serif';
+
+        this.objects.forEach(object => this.createSprite(object));
     }
 
     add(object) {
         this.objects.push(object);
         this.objects.sort((a, b) => a.z - b.z);
+        this.createSprite(object);
     }
 
     remove(object) {
@@ -133,5 +136,18 @@ class Screen {
     toggleHelpButton() {
         document.querySelector('.btn-help').classList.toggle('hidden');
         document.querySelector('.btn-resume').classList.toggle('hidden');
+    }
+
+    createSprite(object) {
+        if (!object.createSprite) {
+            return;
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = canvas.height = this.scale * 20;
+        const ctx = canvas.getContext('2d');
+        ctx.scale(this.scale, this.scale);
+
+        object.createSprite(canvas, ctx);
     }
 }
