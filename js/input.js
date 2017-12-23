@@ -1,14 +1,23 @@
 class Input {
+    constructor() {
+        this.directionKeys = [
+            [37, 74, 65, 81],
+            [38, 73, 87, 90],
+            [39, 76, 68],
+            [40, 75, 83],
+        ];
+    }
+
     onDirection(callback) {
         let down;
 
         document.addEventListener('keydown', e => {
-            if (37 <= e.keyCode && e.keyCode <= 40) {
-                const dir = new Direction(
-                    (e.keyCode - 38) % 2,
-                    (e.keyCode - 39) % 2
-                );
-                callback(dir);
+            const direction = this.getDirection(e.keyCode);
+            if (direction !== undefined) {
+                callback(new Direction(
+                    (direction - 1) % 2,
+                    (direction - 2) % 2
+                ));
             }
         });
 
@@ -69,5 +78,13 @@ class Input {
                 callback();
             }
         });
+    }
+
+    getDirection(key) {
+        for (const i in this.directionKeys) {
+            if (this.directionKeys[i].includes(key)) {
+                return +i;
+            }
+        }
     }
 }
