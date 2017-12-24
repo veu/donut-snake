@@ -157,6 +157,11 @@ class Screen {
             this.ctx.restore();
         });
 
+        this.ctx.clearRect(-20, -20, 140, 20);
+        this.ctx.clearRect(-20, -20, 20, 140);
+        this.ctx.clearRect(-20, 100, 140, 20);
+        this.ctx.clearRect(100, -20, 20, 140);
+
         this.ctx.restore();
 
         this.ctx.save();
