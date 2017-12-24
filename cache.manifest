@@ -1,5 +1,5 @@
 CACHE MANIFEST
-#version 13
+#version 14
 CACHE:
 index.html
 js/direction.js
@@ -13,6 +13,7 @@ js/tutorial.js
 js/tween.js
 js/view/donut.js
 js/view/drink.js
+js/view/menu.js
 js/view/snake-body.js
 js/view/snake-head.js
 js/view/snake-tail.js

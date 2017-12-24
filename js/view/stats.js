@@ -9,7 +9,7 @@ class StatsView {
         ++ this.animationStep;
 
         ctx.fillStyle = '#f6b';
-        ctx.fillRect(-20, 110, 140, 200);
+        ctx.fillRect(-10, 120, 140, 200);
         ctx.fillStyle = '#200';
         let offset = 125;
 
@@ -20,13 +20,13 @@ class StatsView {
             let leftWidth = ctx.measureText(key).width;
             let rightWidth = ctx.measureText(value).width;
             for (let i = 0; i < 98 - leftWidth - rightWidth; i += 2) {
-                const elementOffset = key == 'Moves' && isInDanger ? offset + Math.sin(i - this.animationStep) / 3 : offset;
-                ctx.fillRect(1 + leftWidth + i, elementOffset, 1, 1);
+                const elementOffset = key == 'Moves' && isInDanger ? offset + Math.sin(i - this.animationStep) / 3 + 9 : offset + 9;
+                ctx.fillRect(11 + leftWidth + i, elementOffset, 1, 1);
             }
             ctx.textAlign = 'left';
-            ctx.fillText(key, 0, offset + 1);
+            ctx.fillText(key, 10, offset + 10);
             ctx.textAlign = 'right';
-            ctx.fillText(value, 100, offset + 1);
+            ctx.fillText(value, 110, offset + 10);
 
             offset += 11;
         }

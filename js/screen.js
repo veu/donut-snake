@@ -36,17 +36,13 @@ class Screen {
         this.innerHeight = innerHeight;
         this.innerWidth = innerWidth;
 
-        this.scale = Math.min(innerWidth / 120, innerHeight / 180);
+        this.scale = Math.min(this.innerWidth / 120, this.innerHeight / 180);
+        this.gridScale = ((this.scale * 10) | 0) / 10;
 
         this.canvas.width = 120 * this.scale;
-        this.canvas.height = innerHeight;
+        this.canvas.height = this.innerHeight;
 
-        this.bottom = innerHeight / this.scale;
-
-        document.documentElement.style.setProperty('--scale', this.scale);
-
-        this.scale = ((this.scale * 10) | 0) / 10;
-        this.ctx.scale(this.scale, this.scale);
+        this.bottom = this.innerHeight / this.scale;
 
         this.ctx.font = '8px sans-serif';
 
@@ -147,18 +143,33 @@ class Screen {
 
         this.ctx.save();
 
+        this.ctx.scale(this.gridScale, this.gridScale);
         this.ctx.clearRect(0, 0, 120, 120);
 
         this.ctx.translate(10,10);
 
-        this.objects.forEach(object => object.z < 10 && object.draw(this.ctx));
+        this.objects.forEach(object => {
+            if (object.z >= 10) return;
 
-        this.ctx.clearRect(-20, -20, 140, 20);
-        this.ctx.clearRect(-20, -20, 20, 130);
-        this.ctx.clearRect(-20, 100, 140, 10);
-        this.ctx.clearRect(100, -20, 20, 130);
+            this.ctx.save();
 
-        this.objects.forEach(object => object.z >= 10 && object.draw(this.ctx));
+            object.draw(this.ctx);
+            this.ctx.restore();
+        });
+
+        this.ctx.restore();
+
+        this.ctx.save();
+
+        this.ctx.scale(this.scale, this.scale);
+
+        this.objects.forEach(object => {
+            if (object.z < 10) return;
+
+            this.ctx.save();
+            object.draw(this.ctx);
+            this.ctx.restore();
+        });
 
         this.ctx.restore();
     }
@@ -171,7 +182,7 @@ class Screen {
         const canvas = document.createElement('canvas');
         canvas.width = canvas.height = this.scale * 20;
         const ctx = canvas.getContext('2d');
-        ctx.scale(this.scale, this.scale);
+        ctx.scale(this.gridScale, this.gridScale);
 
         object.createSprite(canvas, ctx);
     }

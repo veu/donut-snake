@@ -45,7 +45,6 @@ class SnakeBodyView {
     }
 
     draw(ctx) {
-        ctx.save();
         ctx.translate(this.x * 20 + 10, this.y * 20 + 10);
 
         if (this.visible < 1) {
@@ -82,8 +81,6 @@ class SnakeBodyView {
 
             if (this.color === undefined) break;
         }
-
-        ctx.restore();
     }
 
     createGradients() {

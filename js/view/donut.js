@@ -26,12 +26,8 @@ class DonutView {
     }
 
     draw(ctx) {
-        ctx.save();
-
         ctx.translate(this.cell.x * 20 + 10, this.cell.y * 20 + 10);
         ctx.scale(this.scale, this.scale);
         ctx.drawImage(this.sprite, -10, -10, 20, 20);
-
-        ctx.restore();
     }
 }
