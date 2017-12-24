@@ -73,6 +73,8 @@ class Tutorial {
         game.state.score = 0;
         game.stats.load();
 
+        game.menu.load();
+
         this.view = new TutorialView(this);
         this.view.show();
         await game.screen.wait(60);

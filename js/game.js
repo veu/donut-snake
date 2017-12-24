@@ -9,19 +9,20 @@ class Game {
         this.grid = new Grid();
         this.snake = new Snake();
         this.stats = new Stats();
+        this.menu = new MenuView();
     }
 
     start() {
         this.screen.reset();
 
         if (this.tutorial) {
-            this.screen.toggleHelpButton();
             this.tutorial = undefined;
         }
 
         this.snake.init(this.state.plays > 4);
         this.grid.init();
         this.stats.init();
+        this.menu.init();
 
         for (const part of this.snake.iterate()) {
             this.grid.empty(part);
@@ -36,7 +37,6 @@ class Game {
         this.locked = true;
 
         this.tutorial = new Tutorial();
-        this.screen.toggleHelpButton();
         await this.tutorial.init();
 
         this.locked = false;
@@ -50,7 +50,6 @@ class Game {
         this.screen.reset();
 
         if (this.tutorial) {
-            this.screen.toggleHelpButton();
             this.tutorial = undefined;
         }
 
@@ -64,6 +63,7 @@ class Game {
                 this.grid.load();
                 this.snake.load();
                 this.stats.load();
+                this.menu.load();
                 return;
             }
         } catch (e) { console.error(e); }

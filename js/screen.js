@@ -8,8 +8,22 @@ class Screen {
         this.objects = [];
         this.tweens = [];
         this.waiting = [];
+        this.clickAreas = {};
 
         setInterval(() => this.tick(), 1000 / 30);
+
+        this.canvas.addEventListener('click', e => {
+            const x = e.offsetX / this.scale;
+            const y = e.offsetY / this.scale;
+            for (const action in this.clickAreas) {
+                const area = this.clickAreas[action];
+
+                if (x >= area.left && x <= area.right && y >= area.top && y <= area.bottom) {
+                    input.clickEvents[action] && input.clickEvents[action]();
+                    return;
+                }
+            }
+        });
     }
 
     resize() {
@@ -17,6 +31,8 @@ class Screen {
 
         this.canvas.width = 120 * this.scale;
         this.canvas.height = innerHeight;
+
+        this.bottom = innerHeight / this.scale;
 
         document.documentElement.style.setProperty('--scale', this.scale);
 
@@ -58,6 +74,10 @@ class Screen {
         });
     }
 
+    addClickArea(action, area) {
+        this.clickAreas[action] = area;
+    }
+
     reset() {
         for (const tween of this.tweens) {
             tween.end();
@@ -70,6 +90,7 @@ class Screen {
         this.waiting = [];
 
         this.objects = [];
+        this.clickAreas = {};
     }
 
     tick() {
@@ -115,6 +136,8 @@ class Screen {
             this.resize();
         }
 
+        this.clickAreas = {};
+
         this.ctx.save();
 
         this.ctx.clearRect(0, 0, 120, 120);
@@ -131,11 +154,6 @@ class Screen {
         this.objects.forEach(object => object.z >= 10 && object.draw(this.ctx));
 
         this.ctx.restore();
-    }
-
-    toggleHelpButton() {
-        document.querySelector('.btn-help').classList.toggle('hidden');
-        document.querySelector('.btn-resume').classList.toggle('hidden');
     }
 
     createSprite(object) {

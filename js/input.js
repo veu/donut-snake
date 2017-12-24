@@ -6,6 +6,7 @@ class Input {
             [39, 76, 68],
             [40, 75, 83],
         ];
+        this.clickEvents = {};
     }
 
     onDirection(callback) {
@@ -50,10 +51,7 @@ class Input {
     }
 
     onRestart(callback) {
-        for (const element of [...document.querySelectorAll('.btn-restart')]) {
-            element.addEventListener('click', () => { callback() });
-        }
-
+        this.clickEvents.restart = callback;
         document.addEventListener('keydown', e => {
             if (e.keyCode == 82 && !['Control', 'Meta'].some(key => event.getModifierState(key))) {
                 e.preventDefault();
@@ -63,7 +61,7 @@ class Input {
     }
 
     onHelp(callback) {
-        document.querySelector('.btn-help').addEventListener('click', e => { callback(); });
+        this.clickEvents.help = callback;
         document.addEventListener('keydown', e => {
             if (e.keyCode == 72 && !['Control', 'Meta'].some(key => event.getModifierState(key))) {
                 callback();
@@ -72,7 +70,7 @@ class Input {
     }
 
     onResume(callback) {
-        document.querySelector('.btn-resume').addEventListener('click', e => { callback(); });
+        this.clickEvents.resume = callback;
         document.addEventListener('keydown', e => {
             if (e.keyCode == 27 && !['Control', 'Meta'].some(key => event.getModifierState(key))) {
                 callback();
