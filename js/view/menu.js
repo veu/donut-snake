@@ -25,12 +25,12 @@ class MenuView {
             const text = game.tutorial ? 'Resume' : 'Help';
             const area = {
                 left: 10,
-                top: game.screen.bottom - 15,
+                top: game.screen.bottom - 13,
                 right: 10 + ctx.measureText(text).width,
                 bottom: game.screen.bottom - 5
             };
             game.screen.addClickArea(game.tutorial ? 'resume' : 'help', area);
-            ctx.fillText(text, 0, game.screen.bottom - 15);
+            ctx.fillText(text, 0, game.screen.bottom - 13);
         }
 
         ctx.textAlign = 'right';
@@ -39,12 +39,12 @@ class MenuView {
             const text = 'Restart';
             const area = {
                 left: 110 - ctx.measureText(text).width,
-                top: game.screen.bottom - 15,
+                top: game.screen.bottom - 13,
                 right: 110,
                 bottom: game.screen.bottom - 5
             };
             game.screen.addClickArea('restart', area);
-            ctx.fillText(text, 100, game.screen.bottom - 15);
+            ctx.fillText(text, 100, game.screen.bottom - 13);
         }
 
 

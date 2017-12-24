@@ -47,9 +47,6 @@ const game = new Game();
 game.init();
 const input = new Input();
 
-input.onResize(() => {
-    game.screen.resize();
-});
 input.onDirection(dir => game.move(dir));
 input.onRestart(() => game.start());
 input.onHelp(() => game.startTutorial());

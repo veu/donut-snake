@@ -10,6 +10,8 @@ class Screen {
         this.waiting = [];
         this.clickAreas = {};
 
+        this.innerHeight = this.innerWidth = 0;
+
         setInterval(() => this.tick(), 1000 / 30);
 
         this.canvas.addEventListener('click', e => {
@@ -27,6 +29,13 @@ class Screen {
     }
 
     resize() {
+        if (innerHeight == this.innerHeight && innerWidth == this.innerWidth) {
+            return;
+        }
+
+        this.innerHeight = innerHeight;
+        this.innerWidth = innerWidth;
+
         this.scale = Math.min(innerWidth / 120, innerHeight / 180);
 
         this.canvas.width = 120 * this.scale;
@@ -132,9 +141,7 @@ class Screen {
     }
 
     draw() {
-        if (!this.scale) {
-            this.resize();
-        }
+        this.resize();
 
         this.clickAreas = {};
 

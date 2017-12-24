@@ -46,10 +46,6 @@ class Input {
         }, {passive: false});
     }
 
-    onResize(callback) {
-        onresize = () => { callback() };
-    }
-
     onRestart(callback) {
         this.clickEvents.restart = callback;
         document.addEventListener('keydown', e => {
