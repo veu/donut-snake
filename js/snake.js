@@ -64,24 +64,15 @@ class Snake {
             }
 
             const tailPos = this.get(-2);
-
-            const isDrinkColor = game.state.snake.colors.length > 0 && c === color;
             const emptyCell = game.state.snake.positions.pop();
 
-            const lastBodyPos = this.get(-1);
-            const removedPos = this.get(-2);
+            this.bodyViews.splice(-2, 1)[0].hide(first);
+            this.bodyViews.splice(-2, 1, new SnakeBodyView(this.get(-2), true, first))[0].hide(first);
 
-            const bodyView = this.bodyViews.find(view => removedPos.x == view.x && removedPos.y == view.y);
-            this.bodyViews = this.bodyViews.filter(view => view !== bodyView);
-            bodyView.hide(first);
-
-            const lastBodyView = this.bodyViews.find(view => lastBodyPos.x == view.x && lastBodyPos.y == view.y);
-            lastBodyView.hide(first);
-            this.bodyViews.splice(-2, 1, new SnakeBodyView(this.get(-2), true, first));
             this.bodyViews[this.bodyViews.length - 1].move(tailPos, first);
 
             yield {
-                isDrinkColor,
+                isDrinkColor: game.state.snake.colors.length > 0 && c === color,
                 emptyCell,
             };
 
