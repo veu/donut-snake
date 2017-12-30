@@ -36,6 +36,13 @@ class Snake {
         this.bodyViews.push(new SnakeTailView(this.get(game.state.snake.positions.length - 1)));
     }
 
+    togglePowerUp() {
+        for (const view of this.bodyViews) {
+            game.screen.remove(view);
+        }
+        this.load();
+    }
+
     getNextPosition(dir) {
         return {
             x: (game.state.snake.positions[0].x + dir.x + 5) % 5,

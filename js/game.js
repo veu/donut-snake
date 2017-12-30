@@ -10,6 +10,7 @@ class Game {
         this.snake = new Snake();
         this.stats = new Stats();
         this.menu = new MenuView();
+        this.powerUp = new PowerUp();
     }
 
     start() {
@@ -23,6 +24,7 @@ class Game {
         this.grid.init();
         this.stats.init();
         this.menu.init();
+        this.powerUp.init();
 
         for (const part of this.snake.iterate()) {
             this.grid.empty(part);
@@ -64,6 +66,7 @@ class Game {
                 this.snake.load();
                 this.stats.load();
                 this.menu.load();
+                this.powerUp.load();
                 return;
             }
         } catch (e) { console.error(e); }
@@ -102,19 +105,33 @@ class Game {
 
         this.grid.empty(cell);
 
-        if (!cell.isDonut) {
+        if (cell.isDonut) {
+            if (cell.isSprinkled) {
+                this.powerUp.bump();
+                if (this.powerUp.isActive()) {
+                    this.grid.togglePowerUp();
+                    this.snake.togglePowerUp();
+                }
+
+            }
+        } else {
             let count = 0;
             let delta = 0;
             for (const result of this.snake.drink(cell.color)) {
-                this.grid.roll(result.emptyCell);
+                this.grid.roll(result.emptyCell, true);
 
                 this.state.score += delta += ++ count;
                 this.state.highScore = Math.max(this.state.score, this.state.highScore);
 
-                if (result.isDrinkColor) {
+                if (result.isDrinkColor || game.powerUp.isActive()) {
                     this.state.moves += 2;
                 }
                 await this.screen.wait(10);
+            }
+
+            if (this.powerUp.isActive()) {
+                this.powerUp.reset();
+                this.grid.togglePowerUp();
             }
         }
 

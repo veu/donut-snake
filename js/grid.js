@@ -3,6 +3,7 @@ class Grid {
         this.views = [];
 
         game.state.grid = [];
+        game.state.sprinkles = null;
 
         for(let y = 5; y--;) {
             for(let x = 5; x--;) {
@@ -12,6 +13,8 @@ class Grid {
     }
 
     load() {
+        game.state.sprinkles = game.state.sprinkles || null;
+
         this.views = [];
 
         for(let y = 5; y--;) {
@@ -36,7 +39,8 @@ class Grid {
             x,
             y,
             color: value % 4,
-            isDonut: value < 4
+            isDonut: value < 4,
+            isSprinkled: game.state.sprinkles === x + y * 5
         };
     }
 
@@ -49,8 +53,13 @@ class Grid {
         }
     }
 
-    roll({x, y}) {
-        game.state.grid[x + y * 5] = this.getRandomColor(x, y);
+    roll({x, y}, sprinkle = false) {
+        const color = this.getRandomColor(x, y);
+        game.state.grid[x + y * 5] = color;
+
+        if (sprinkle && game.state.sprinkles === null && color < 4 && !game.powerUp.isActive() && Math.random() < .5) {
+            game.state.sprinkles = x + y * 5;
+        }
 
         const cell = this.get({x, y});
         this.addView(cell);
@@ -61,6 +70,10 @@ class Grid {
         game.screen.remove(view);
 
         game.state.grid[x + y * 5] = null;
+
+        if (game.state.sprinkles === x + y * 5) {
+            game.state.sprinkles = null;
+        }
     }
 
     *iterate() {
@@ -98,8 +111,8 @@ class Grid {
         return neighbors;
     }
 
-    addView(cell) {
-        const view = cell.isDonut ? new DonutView(cell) : new DrinkView(cell);
+    addView(cell, animation='scale') {
+        const view = cell.isDonut ? new DonutView(cell, animation) : new DrinkView(cell, animation);
 
         this.views[cell.x + cell.y * 5] = view;
         game.screen.add(view);
@@ -107,5 +120,25 @@ class Grid {
 
     isOccupied({x, y}) {
         return game.state.grid[x + y * 5] === null;
+    }
+
+    togglePowerUp() {
+        for (const view of this.views) {
+            if (view) {
+                view.fadeOut();
+            }
+        }
+
+        this.views = [];
+
+        for(let y = 5; y--;) {
+            for(let x = 5; x--;) {
+                const cell = this.get({x, y});
+
+                if (cell) {
+                    this.addView(cell, 'fadeIn');
+                }
+            }
+        }
     }
 }

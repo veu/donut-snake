@@ -6,6 +6,7 @@ js/direction.js
 js/game.js
 js/grid.js
 js/input.js
+js/power-up.js
 js/screen.js
 js/snake.js
 js/stats.js

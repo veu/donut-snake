@@ -104,9 +104,9 @@ class SnakeBodyView {
                     20
                 );
             }
-            this.gradients[i].addColorStop(0, i ? '#eb6' : ['#f22','#0c0','#22f','#aa0'][this.color]);
-            this.gradients[i].addColorStop(.5, i ? '#fc8' : ['#faa','#afa','#aaf','#ff8'][this.color]);
-            this.gradients[i].addColorStop(1, i ? '#eb6' : ['#f22','#0c0','#22f','#aa0'][this.color]);
+            this.gradients[i].addColorStop(0, i ? '#eb6' : game.powerUp.isActive() ? '#a08' : ['#f22','#0c0','#22f','#aa0'][this.color]);
+            this.gradients[i].addColorStop(.5, i ? '#fc8' : game.powerUp.isActive() ? '#f8c' : ['#faa','#afa','#aaf','#ff8'][this.color]);
+            this.gradients[i].addColorStop(1, i ? '#eb6' : game.powerUp.isActive() ? '#a08' : ['#f22','#0c0','#22f','#aa0'][this.color]);
 
             if (this.color === undefined) break;
         }
