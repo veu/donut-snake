@@ -56,7 +56,7 @@ class Snake {
             y: to.y,
         });
 
-        game.state.snake.colors.unshift(to.color);
+        game.state.snake.colors.unshift(to.isDonut ? to.color : undefined);
         this.bodyViews.splice(1, 0, new SnakeBodyView(this.get(1), true));
         this.bodyViews[0].move(this.get(0));
     }
@@ -64,11 +64,11 @@ class Snake {
     *drink(color) {
         let first = true;
         while (true) {
-            const c = game.state.snake.colors.pop();
-
-            if (c === undefined) {
+            if (game.state.snake.colors.length == 0) {
                 return;
             }
+
+            const c = game.state.snake.colors.pop();
 
             const tailPos = this.get(-2);
             const emptyCell = game.state.snake.positions.pop();
