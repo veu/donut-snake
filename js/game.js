@@ -124,7 +124,7 @@ class Game {
                 this.state.highScore = Math.max(this.state.score, this.state.highScore);
 
                 if (result.isDrinkColor || game.powerUp.isActive()) {
-                    this.state.moves += 2;
+                    this.state.moves = Math.min(20, this.state.moves + 2);
                 }
                 await this.screen.wait(10);
             }

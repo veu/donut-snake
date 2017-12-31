@@ -16,7 +16,7 @@ class StatsView {
         const {moves, score, highScore, snake} = game.state;
         const isInDanger = (moves + snake.colors.length < 5 || moves < 3) && moves > 0 && !game.locked;
 
-        for (const [key, value] of [['Moves', moves], ['Score', score], ['High Score', highScore]]) {
+        for (const [key, value] of [['Moves', moves < 20 ? moves : 'MAX'], ['Score', score], ['High Score', highScore]]) {
             let leftWidth = ctx.measureText(key).width;
             let rightWidth = ctx.measureText(value).width;
             for (let i = 0; i < 98 - leftWidth - rightWidth; i += 2) {
