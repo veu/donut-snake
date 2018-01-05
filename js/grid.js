@@ -57,7 +57,7 @@ class Grid {
         const color = this.getRandomColor(x, y);
         game.state.grid[x + y * 5] = color;
 
-        if (sprinkle && game.state.sprinkles === null && color < 4 && !game.powerUp.isActive() && Math.random() < .2) {
+        if (sprinkle && game.state.sprinkles === null && color < 4 && !game.powerUp.isActive() && Math.random() < .1) {
             game.state.sprinkles = x + y * 5;
         }
 
